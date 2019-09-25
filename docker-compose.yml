@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      args:
+        - REQUIREMENTS=requirements.dev.txt
+    ports:
+      - 8000:8000
+    environment:
+      - FLASK_APP=main.py
+    volumes:
+      - avatars:/opt/home_io_backend/avarars
+
+volumes:
+  avatars:
+    driver: local

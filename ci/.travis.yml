@@ -1,0 +1,26 @@
+language: python
+
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.4.2
+
+before_install:
+  # install docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  # run containers
+  - docker-compose -f docker-compose.yml -f docker-compose.test.yml up
+  
+
+script:
+  - pytest -xvv home_io_backend/test
+
+deploy:
+  provider: script
+  script: bash docker_hub_deploy.sh
+  on:
+    branch: master

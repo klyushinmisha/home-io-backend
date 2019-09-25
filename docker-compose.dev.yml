@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  api:
+    build:
+      args:
+        - REQUIREMENTS=requirements.dev.txt
+    environment:
+      - FLASK_APP=main.py
+    command:
+      # TODO: add run command

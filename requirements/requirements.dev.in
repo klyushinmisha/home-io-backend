@@ -1,0 +1,13 @@
+flask
+celery
+pytest
+
+sqlalchemy
+SQLAlchemy-Utils
+Flask-SQLAlchemy
+Flask-Migrate
+
+marshmallow
+Flask-CORS
+arrow
+Flask-JWT-Extended
