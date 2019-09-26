@@ -4,8 +4,7 @@ services:
   api:
     build:
       args:
+        - CONFIG=dev_config.py
         - REQUIREMENTS=requirements.dev.txt
-    environment:
-      - FLASK_APP=main.py
     command:
-      # TODO: add run command
+        python3 example.py

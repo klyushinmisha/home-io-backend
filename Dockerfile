@@ -9,4 +9,5 @@ RUN pip3 install -r ${REQUIREMENTS}
 
 # copy files
 COPY home_io_backend .
+COPY config/${CONFIG} config.py
 COPY example.py .

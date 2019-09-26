@@ -5,11 +5,10 @@ services:
     build:
       context: .
       args:
+        - CONFIG=config.py
         - REQUIREMENTS=requirements.dev.txt
     ports:
       - 8000:8000
-    environment:
-      - FLASK_APP=main.py
     volumes:
       - avatars:/opt/home_io_backend/avarars
 
