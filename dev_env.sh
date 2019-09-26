@@ -1,3 +1,3 @@
 #!/bin/bash
 
-FLASK_APP=main.py flask run
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up

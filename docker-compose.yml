@@ -1,12 +1,14 @@
 version: '3'
 
 services:
-  api:
+  webapi:
+    image: klyushinmisha/home_io_backend
     build:
       context: .
       args:
         - CONFIG=config.py
         - REQUIREMENTS=requirements.dev.txt
+      dockerfile: ci/Dockerfile
     ports:
       - 8000:8000
     volumes:

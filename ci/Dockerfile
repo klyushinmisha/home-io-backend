@@ -8,4 +8,4 @@ COPY ${REQUIREMENTS} .
 RUN pip3 install -r ${REQUIREMENTS}
 
 # copy files
-COPY env.py .
+COPY home_io_backend ./home_io_backend
