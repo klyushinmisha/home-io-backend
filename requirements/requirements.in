@@ -2,6 +2,7 @@ flask
 celery
 
 sqlalchemy
+psycopg2
 SQLAlchemy-Utils
 Flask-SQLAlchemy
 Flask-Migrate

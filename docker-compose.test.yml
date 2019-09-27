@@ -8,6 +8,11 @@ services:
         - REQUIREMENTS=requirements.test.txt
     command:
       python3 example.py --host=0.0.0.0 --port=8000
+  
+  postgres:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
 volumes:
   avatars:

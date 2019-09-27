@@ -27,6 +27,7 @@ marshmallow==3.2.0
 more-itertools==7.2.0     # via pytest, zipp
 packaging==19.2           # via pytest
 pluggy==0.13.0            # via pytest
+psycopg2==2.8.3
 py==1.8.0                 # via pytest
 pyjwt==1.7.1              # via flask-jwt-extended
 pyparsing==2.4.2          # via packaging
