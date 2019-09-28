@@ -6,8 +6,16 @@ services:
       args:
         - CONFIG=test_config.py
         - REQUIREMENTS=requirements.test.txt
+      dockerfile: Dockerfile
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=env.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=8000
     command:
-      python3 example.py --host=0.0.0.0 --port=8000
+      flask run
+    volumes:
+      - ./home_io_backend:/opt/home_io_backend/home_io_backend
   
   postgres:
     environment:

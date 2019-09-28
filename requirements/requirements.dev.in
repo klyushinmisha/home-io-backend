@@ -3,7 +3,7 @@ celery
 pytest
 
 sqlalchemy
-psycopg2
+psycopg2-binary
 SQLAlchemy-Utils
 Flask-SQLAlchemy
 Flask-Migrate

@@ -11,6 +11,9 @@ services:
       dockerfile: ci/Dockerfile
     ports:
       - 8000:8000
+    environment:
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
     volumes:
       - avatars:/opt/home_io_backend/avarars
     depends_on:
@@ -20,6 +23,8 @@ services:
 
   postgres:
     image: postgres:11
+    restart:
+      on-failure
 
 volumes:
   avatars:

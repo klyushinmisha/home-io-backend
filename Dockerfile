@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM klyushinmisha/home_io_bootstrap
 
 WORKDIR /opt/home_io_backend
 
@@ -8,5 +8,7 @@ COPY ${REQUIREMENTS} .
 RUN pip3 install -r ${REQUIREMENTS}
 
 # copy files
+ARG CONFIG
 COPY env.py .
-COPY config/config.py ./home_io_backend/config.py
+COPY config/${CONFIG} ./config.py
+RUN touch __init__.py
