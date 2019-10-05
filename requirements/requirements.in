@@ -7,7 +7,8 @@ SQLAlchemy-Utils
 Flask-SQLAlchemy
 Flask-Migrate
 
-marshmallow
-Flask-CORS
 arrow
+Flask-Bcrypt
+Flask-CORS
 Flask-JWT-Extended
+marshmallow
