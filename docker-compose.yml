@@ -14,6 +14,7 @@ services:
     environment:
       - LC_ALL=C.UTF-8
       - LANG=C.UTF-8
+      - MIGRATIONS_DIR=/opt/home_io_backend/home_io_backend/migrations
     volumes:
       - avatars:/opt/home_io_backend/avarars
     depends_on:
