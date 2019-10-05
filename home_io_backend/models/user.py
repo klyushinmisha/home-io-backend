@@ -1,5 +1,6 @@
 import arrow
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt, \
+    generate_password_hash, check_password_hash
 from sqlalchemy_utils import ArrowType
 
 from . import db
@@ -25,10 +26,10 @@ class User(db.Model):
     password = property()
 
     @password.setter
-    def password(value):
+    def password(self, value):
         self._password_hash = generate_password_hash(value)
 
-    def check_password(value):
+    def check_password(self, value):
         check_password_hash(self._password_hash, value)
 
     created_at = db.Column(
@@ -38,6 +39,6 @@ class User(db.Model):
 
     devices = db.relationship(
         Device,
-        back_populates='user',
+        backref='user',
         cascade='all, delete-orphan'
     )
