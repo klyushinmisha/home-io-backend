@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from sqlalchemy_utils import ArrowType
 
 from . import db
+from .device import Device
 
 
 class User(db.Model):
@@ -33,4 +34,10 @@ class User(db.Model):
     created_at = db.Column(
         ArrowType,
         default=arrow.utcnow
+    )
+
+    devices = db.relationship(
+        Device,
+        back_populates='user',
+        cascade='all, delete-orphan'
     )

@@ -6,7 +6,8 @@ from sqlalchemy import Enum
 from sqlalchemy_utils import ArrowType, UUIDType
 
 from . import db
-from .user import User
+from .device_log import DeviceLog
+from .device_task import DeviceTask
 
 
 class TypeEnum(enum.Enum):
@@ -18,6 +19,8 @@ class TypeEnum(enum.Enum):
 class Device(db.Model):
 
     __tablename__ = "device"
+
+    baked_query = db.bakery(lambda session: session.query(Device))
 
     id = db.Column(
         UUIDType(binary=True),
@@ -41,9 +44,18 @@ class Device(db.Model):
     
     owner_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id'),
-        cascade="all, delete-orphan",
+        db.ForeignKey('user.id', ondelete='CASCADE'),
         nullable=False
     )
 
+    device_logs = db.relationship(
+        DeviceLog,
+        back_populates='device',
+        cascade='all, delete-orphan'
+    )
 
+    device_tasks = db.relationship(
+        DeviceTask,
+        back_populates='device',
+        cascade='all, delete-orphan'
+    )

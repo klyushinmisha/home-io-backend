@@ -7,6 +7,8 @@ from . import db
 class DeviceLog(db.Model):
     __tablename__ = "device_log"
 
+    baked_query = db.bakery(lambda session: session.query(DeviceLog))
+
     id = db.Column(
         db.Integer,
         autoincrement=True,
@@ -21,11 +23,14 @@ class DeviceLog(db.Model):
 
     created_at = db.Column(
         ArrowType,
-        default=arrow.utcnow
+        default=arrow.utcnow,
+        index=True
     )
 
     device_id = db.Column(
-        db.ForeignKey('device.id'),
-        cascade="all, delete-orphan",
+        db.ForeignKey(
+            'device.id',
+            ondelete='CASCADE'
+        ),
         nullable=False
     )

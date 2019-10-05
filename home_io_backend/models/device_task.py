@@ -8,6 +8,8 @@ class DeviceTask(db.Model):
 
     __tablename__ = "device_task"
 
+    baked_query = db.bakery(lambda session: session.query(DeviceTask))
+
     id = db.Column(
         db.Integer,
         autoincrement=True,
@@ -16,8 +18,10 @@ class DeviceTask(db.Model):
     )
 
     device_id = db.Column(
-        db.ForeignKey('device.id'),
-        cascade="all, delete-orphan",
+        db.ForeignKey(
+            'device.id',
+            ondelete='CASCADE'
+        ),
         nullable=False
     )
 
@@ -26,7 +30,7 @@ class DeviceTask(db.Model):
         nullable=False
     )
 
-    create_at = db.Column(
+    created_at = db.Column(
         ArrowType,
         default=arrow.utcnow
     )
