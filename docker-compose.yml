@@ -24,6 +24,7 @@ services:
 
   postgres:
     image: postgres:11
+    container_name: home_io_backend_postgres
     restart:
       on-failure
 
