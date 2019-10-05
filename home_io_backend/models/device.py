@@ -24,9 +24,9 @@ class Device(db.Model):
 
     id = db.Column(
         UUIDType(binary=True),
+        default=uuid.uuid4,
         primary_key=True,
         unique=True,
-        nullable=False
     )
     
     name = db.Column(
@@ -50,12 +50,12 @@ class Device(db.Model):
 
     device_logs = db.relationship(
         DeviceLog,
-        back_populates='device',
+        backref='device',
         cascade='all, delete-orphan'
     )
 
     device_tasks = db.relationship(
         DeviceTask,
-        back_populates='device',
+        backref='device',
         cascade='all, delete-orphan'
     )
