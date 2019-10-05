@@ -1,9 +1,11 @@
+import arrow
 from flask_bcrypt import Bcrypt
+from sqlalchemy_utils import ArrowType
 
 from . import db
 
 
-class User(db.Model, DateMixin):
+class User(db.Model):
     __tablename__ = "user"
 
     baked_query = db.bakery(lambda session: session.query(User))
@@ -27,3 +29,8 @@ class User(db.Model, DateMixin):
 
     def check_password(value):
         check_password_hash(self._password_hash, value)
+
+    created_at = db.Column(
+        ArrowType,
+        default=arrow.utcnow
+    )
