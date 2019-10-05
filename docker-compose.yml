@@ -27,7 +27,11 @@ services:
     container_name: home_io_backend_postgres
     restart:
       on-failure
+    volumes:
+      - postgres:/var/lib/postgresql/data
 
 volumes:
   avatars:
+    driver: local
+  postgres:
     driver: local
