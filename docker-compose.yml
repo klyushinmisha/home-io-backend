@@ -3,6 +3,7 @@ version: '3'
 services:
   webapi:
     image: klyushinmisha/home_io_backend
+    container_name: home_io_backend_webapi
     build:
       context: .
       args:
