@@ -1,7 +1,10 @@
+import uuid
+
 import pytest
+from sqlalchemy import bindparam
+
 from ...models.device import Device, TypeEnum
 from ...models import User
-from sqlalchemy import bindparam
 
 
 @pytest.fixture(scope='function')
@@ -17,6 +20,7 @@ def device_id(app, db):
         
         # create device to read
         d = Device(
+            id=uuid.uuid4(),
             name='testdevice',
             device_type=TypeEnum.blinker,
             owner_id=u.id
@@ -43,6 +47,7 @@ class TestDevice:
             db.session.flush()
 
             d = Device(
+                id=uuid.uuid4(),
                 name=name,
                 device_type=device_type
             )

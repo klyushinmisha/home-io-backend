@@ -5,7 +5,7 @@ db = SQLAlchemy()
 db.bakery = baked.bakery()
 
 from .user import User
-from .device import Device
+from .device import Device, TypeEnum
 from .device_log import DeviceLog
 from .device_task import DeviceTask
 
@@ -14,5 +14,6 @@ __all__ = [
     'User',
     'Device',
     'DeviceLog',
-    'DeviceTask'
+    'DeviceTask',
+    'TypeEnum'
 ]

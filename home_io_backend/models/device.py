@@ -1,6 +1,5 @@
 import arrow
 import enum
-import uuid
 
 from sqlalchemy import Enum
 from sqlalchemy_utils import ArrowType, UUIDType
@@ -24,7 +23,7 @@ class Device(db.Model):
 
     id = db.Column(
         UUIDType(binary=True),
-        default=uuid.uuid4,
+        nullable=False,
         primary_key=True,
         unique=True,
     )
