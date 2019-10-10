@@ -67,7 +67,8 @@ class TestDeviceLog:
     def test_read(self, app, db, device_log_id):
         with app.app_context():
             bq = DeviceLog.baked_query + (lambda q: q
-                                          .filter(DeviceLog.id == bindparam('device_log_id')))
+                .filter(DeviceLog.id == bindparam('device_log_id'))
+            )
             bq_params = {
                 'device_log_id': device_log_id
             }
