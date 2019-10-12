@@ -24,6 +24,7 @@ jinja2==2.10.3            # via flask
 kombu==4.6.5              # via celery
 mako==1.1.0               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
+marshmallow-arrow==1.0
 marshmallow==3.2.1
 more-itertools==7.2.0     # via zipp
 psycopg2-binary==2.8.3
@@ -31,10 +32,10 @@ pycparser==2.19           # via cffi
 pyjwt==1.7.1              # via flask-jwt-extended
 python-dateutil==2.8.0    # via alembic, arrow
 python-editor==1.0.4      # via alembic
-pytz==2019.2              # via celery
+pytz==2019.3              # via celery
 six==1.12.0               # via bcrypt, flask-cors, flask-jwt-extended, python-dateutil, sqlalchemy-utils
 sqlalchemy-utils==0.34.2
-sqlalchemy==1.3.9
+sqlalchemy==1.3.10
 vine==1.3.0               # via amqp, celery
 werkzeug==0.16.0          # via flask, flask-jwt-extended
 zipp==0.6.0               # via importlib-metadata
