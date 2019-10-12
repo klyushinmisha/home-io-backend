@@ -1,5 +1,5 @@
 import pytest
-from ... import create_app
+from .. import create_app
 
 
 def pytest_make_parametrize_id(config, val):
