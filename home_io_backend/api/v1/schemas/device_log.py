@@ -5,42 +5,38 @@ __all__ = [
 
 from marshmallow import fields, validate, Schema, post_load
 from marshmallow_arrow import ArrowField
-from ....models import DeviceLog
+from ....models import DeviceLog, Device
 import json
 
 
 class DeviceLogSchema(Schema):
     id = fields.Integer()
 
-    log = fields.Dict(
-        required=True)
+    log = fields.Raw(
+        required=True
+    )
 
     created_at = ArrowField()
 
-    device_id = fields.Nested(
-        'device.id',
+    device_id = fields.Integer(
         required=True,
-        exclude='user,'
+        validate=[
+            lambda dev_id: Device.query.get(dev_id) is not None
+        ]
     )
 
     @post_load()
     def create_device_log_object(self, data):
-        return DeviceLog(
-            id=data["id"],
-            log=json.loads(data["log"]),
-            created_at=data["created_at"],
-            device_id=data["device_id"]
-        )
+        data['log'] = json.loads(data["log"])
+        return DeviceLog(**data)
 
 
 DeviceLogReadSchema = DeviceLogSchema()
 DevicesLogReadSchema = DeviceLogSchema(many=True)
-'''
 DeviceLogCreateSchema = DeviceLogSchema(
-    exclude=('id', 'created_at', 'devices')
-) '''
-'''
+    exclude=('id', 'created_at', 'device_id')
+)
 DeviceLogUpdateSchema = DeviceLogSchema(
-    exclude=('id', 'log', 'created_at'),
+    exclude=('id', 'created_at', 'device_id'),
     partial=True
-)'''
+)
