@@ -14,3 +14,4 @@ Flask-CORS
 Flask-JWT-Extended
 marshmallow
 marshmallow-arrow
+marshmallow-enum

@@ -10,7 +10,7 @@ arrow==0.15.2
 bcrypt==3.1.7             # via flask-bcrypt
 billiard==3.6.1.0         # via celery
 celery==4.3.0
-cffi==1.12.3              # via bcrypt
+cffi==1.13.0              # via bcrypt
 click==7.0                # via flask
 flask-bcrypt==0.7.1
 flask-cors==3.0.8
@@ -25,6 +25,7 @@ kombu==4.6.5              # via celery
 mako==1.1.0               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
 marshmallow-arrow==1.0
+marshmallow-enum==1.5.1
 marshmallow==3.2.1
 more-itertools==7.2.0     # via zipp
 psycopg2-binary==2.8.3
