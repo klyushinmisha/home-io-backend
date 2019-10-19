@@ -13,6 +13,7 @@ def update_instance(schema, json, obj):
 from .user import UserSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
+from .device_task import DeviceTaskSchema
 
 
 UserReadSchema = UserSchema()
@@ -49,6 +50,19 @@ DeviceLogUpdateSchema = DeviceLogSchema(
     partial=True
 )
 
+DeviceTaskReadSchema = DeviceTaskSchema()
+DeviceTasksReadSchema = DeviceTaskSchema(many=True)
+DeviceTaskCreateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at', 'device_id')
+)
+DeviceTasksCreateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at', 'device_id'),
+    many=True
+)
+DeviceTaskUpdateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at', 'device_id'),
+    partial=True
+)
 
 __all__ = [
     # user schemas
@@ -69,4 +83,11 @@ __all__ = [
     'DeviceLogCreateSchema',
     'DeviceLogsCreateSchema',
     'DeviceLogUpdateSchema',
+
+    # device task schemas
+    'DeviceTaskReadSchema',
+    'DeviceTasksReadSchema',
+    'DeviceTaskCreateSchema',
+    'DeviceTasksCreateSchema',
+    'DeviceTaskUpdateSchema'
 ]
