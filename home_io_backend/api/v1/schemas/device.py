@@ -1,9 +1,14 @@
 from marshmallow import fields, validate, Schema
 from marshmallow_arrow import ArrowField
-from ....models import TypeEnum
+from marshmallow_enum import EnumField
+
+from ....models import Device, TypeEnum
 
 
 class DeviceSchema(Schema):
+
+    model = Device
+
     id = fields.UUID()
 
     name = fields.String(
@@ -16,7 +21,9 @@ class DeviceSchema(Schema):
 
     registred_at = ArrowField()
 
-    device_type = fields.Int(validate=validate.OneOf(
+    device_type = EnumField(
+        TypeEnum,
+        validate=validate.OneOf(
         [
             TypeEnum.blinker,
             TypeEnum.humidity_sensor,
@@ -28,24 +35,3 @@ class DeviceSchema(Schema):
         'UserSchema',
         many=False
     )
-
-    device_logs = fields.Nested(
-        'DeviceLogSchema',
-        many=True
-    )
-
-    device_tasks = fields.Nested(
-        'DeviceTaskSchema',
-        many=True
-    )
-
-
-DeviceReadSchema = DeviceSchema()
-DevicesReadSchema = DeviceSchema(many=True)
-DeviceCreateSchema = DeviceSchema(
-    exclude=('id', 'registred_at','owner_id', 'device_logs', 'device_tasks')
-)
-DeviceUpdateSchema = DeviceSchema(
-    exclude=('id', 'registred_at', 'ownder_id', 'device_logs', 'device_tasks'),
-    partial=True
-)

@@ -1,15 +1,13 @@
-__all__ = [
-    'UserReadSchema',
-    'UsersReadSchema',
-    'UserCreateSchema',
-    'UserUpdateSchema'
-]
-
 from marshmallow import fields, validate, Schema
 from marshmallow_arrow import ArrowField
 
+from ....models import User
+
 
 class UserSchema(Schema):
+
+    model = User
+
     id = fields.Integer()
 
     username = fields.String(
@@ -40,17 +38,6 @@ class UserSchema(Schema):
 
     devices = fields.Nested(
         'DeviceSchema',
-        exclude=('user', ),
+        exclude=('owner_id', ),
         many=True
     )
-
-
-UserReadSchema = UserSchema()
-UsersReadSchema = UserSchema(many=True)
-UserCreateSchema = UserSchema(
-    exclude=('id', 'created_at', 'devices')
-)
-UserUpdateSchema = UserSchema(
-    exclude=('id', 'created_at', 'devices'),
-    partial=True
-)

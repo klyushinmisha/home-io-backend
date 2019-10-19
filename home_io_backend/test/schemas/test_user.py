@@ -1,7 +1,8 @@
 import pytest
 
 from ...models import User
-from ...api.v1.schemas.user import *
+from ...api.v1.schemas import UserReadSchema, UsersReadSchema, \
+    UserCreateSchema, UserUpdateSchema
 from marshmallow.exceptions import ValidationError
 
 
@@ -25,7 +26,6 @@ class TestUserReadSchema:
             user = User.query.all()[0]
             try:
                 res = UserReadSchema.dump(user)
-                assert False
             except ValidationError as e:
                 assert False, 'Can`t be ValidationError'
 
@@ -159,6 +159,5 @@ class TestUsersReadSchema:
             users = User.query.all()
             try:
                 res = UsersReadSchema.dump(users)
-                assert False
             except ValidationError as e:
                 assert False, 'Can`t be ValidationError'
