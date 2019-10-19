@@ -1,7 +1,7 @@
 """add base models
 
 Revision ID: db6a841c4ac2
-Revises: 
+Revises:
 Create Date: 2019-10-05 12:18:33.101643
 
 """

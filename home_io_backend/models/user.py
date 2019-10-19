@@ -21,7 +21,7 @@ class User(db.Model):
 
     username = db.Column(db.String(32), nullable=False)
     email = db.Column(db.String(64), nullable=False)
-    
+
     _password_hash = db.Column(db.Binary(72), nullable=False)
     password = property()
 

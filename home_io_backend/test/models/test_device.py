@@ -17,7 +17,7 @@ def device_id(app, db):
         )
         db.session.add(u)
         db.session.flush()
-        
+
         # create device to read
         d = Device(
             id=uuid.uuid4(),
@@ -103,7 +103,7 @@ class TestDevice:
             d = (bq(db.session())
                 .params(bq_params)
                 .one_or_none())
-            
+
             # delete device
             db.session.delete(d)
             db.session.commit()

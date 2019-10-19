@@ -34,4 +34,3 @@ class DeviceTask(db.Model):
         ArrowType,
         default=arrow.utcnow
     )
-    

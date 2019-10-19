@@ -27,20 +27,20 @@ class Device(db.Model):
         primary_key=True,
         unique=True,
     )
-    
+
     name = db.Column(
         db.String(128),
         nullable=False
     )
-    
+
     registred_at = db.Column(
         ArrowType,
         default=arrow.utcnow,
         onupdate=arrow.utcnow
     )
-    
+
     device_type = db.Column(Enum(TypeEnum))
-    
+
     owner_id = db.Column(
         db.Integer,
         db.ForeignKey('user.id', ondelete='CASCADE'),

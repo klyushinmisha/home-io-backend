@@ -87,7 +87,7 @@ class TestUser:
             u = (bq(db.session())
                 .params(bq_params)
                 .one_or_none())
-            
+
             # delete user
             db.session.delete(u)
             db.session.commit()
