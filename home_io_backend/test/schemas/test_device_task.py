@@ -61,34 +61,31 @@ class TestDeviceTasksReadSchema:
 class TestDeviceTaskCreateSchema:
     @pytest.mark.parametrize(
         'task',
-        [({"task": "task"},)]
+        (tuple(), )
     )
     def test_invalid_device_task(self, task):
-        device_task_data = {
-            'task': task,
-        }
         try:
-            DeviceTaskCreateSchema.load(device_task_data)
+            DeviceTaskCreateSchema.load(task)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'task' in e.messages
+            pass
 
     @pytest.mark.parametrize(
         'task',
-        ({"task": "task"})
+        ({"task": "task"},)
     )
     def test_valid_data(self, task):
-        device_task_data = {
-            'task': task,
-        }
         try:
-            DeviceTaskCreateSchema.load(device_task_data)
+            print(task)
+            DeviceTaskCreateSchema.load(task)
         except ValidationError as e:
             assert False, 'Can`t be ValidationError'
 
     @pytest.mark.parametrize(
         'id, task, created_at, device_id',
-        (1, {"task": "task"}, 'ANYTIME', uuid.uuid4())
+        (
+            (1, {"task": "task"}, 'ANYTIME', uuid.uuid4()),
+        )
     )
     def test_pass_not_allowed_keys(self, id, task, created_at, device_id):
         device_task_data = {
@@ -127,7 +124,7 @@ class TestDeviceTaskUpdateSchema:
 
     @pytest.mark.parametrize(
         'task',
-        (({"task": "task"}),)
+        (({"task": "task"}, ),)
     )
     def test_partial_update(self, task):
         device_task_data = {
