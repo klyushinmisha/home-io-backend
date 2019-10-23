@@ -28,7 +28,7 @@ UserUpdateSchema = UserSchema(
 DeviceReadSchema = DeviceSchema()
 DevicesReadSchema = DeviceSchema(many=True)
 DeviceCreateSchema = DeviceSchema(
-    exclude=('id', 'registred_at','owner_id')
+    exclude=('id', 'registred_at', 'owner_id')
 )
 DeviceUpdateSchema = DeviceSchema(
     exclude=('id', 'registred_at', 'owner_id'),
@@ -38,17 +38,30 @@ DeviceUpdateSchema = DeviceSchema(
 DeviceLogReadSchema = DeviceLogSchema()
 DeviceLogsReadSchema = DeviceLogSchema(many=True)
 DeviceLogCreateSchema = DeviceLogSchema(
-    exclude=('id', 'created_at', 'device_id')
+    exclude=('id', 'created_at')
 )
 DeviceLogsCreateSchema = DeviceLogSchema(
-    exclude=('id', 'created_at', 'device_id'),
+    exclude=('id', 'created_at'),
     many=True
 )
 DeviceLogUpdateSchema = DeviceLogSchema(
-    exclude=('id', 'created_at', 'device_id'),
+    exclude=('id', 'created_at'),
     partial=True
 )
 
+DeviceTaskReadSchema = DeviceTaskSchema()
+DeviceTasksReadSchema = DeviceTaskSchema(many=True)
+DeviceTaskCreateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at')
+)
+DeviceTasksCreateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at'),
+    many=True
+)
+DeviceTaskUpdateSchema = DeviceTaskSchema(
+    exclude=('id', 'created_at'),
+    partial=True
+)
 
 __all__ = [
     # user schemas
@@ -69,4 +82,11 @@ __all__ = [
     'DeviceLogCreateSchema',
     'DeviceLogsCreateSchema',
     'DeviceLogUpdateSchema',
+
+    # device task schemas
+    'DeviceTaskReadSchema',
+    'DeviceTasksReadSchema',
+    'DeviceTaskCreateSchema',
+    'DeviceTasksCreateSchema',
+    'DeviceTaskUpdateSchema'
 ]
