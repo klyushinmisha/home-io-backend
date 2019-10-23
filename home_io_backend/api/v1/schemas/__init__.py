@@ -13,6 +13,7 @@ def update_instance(schema, json, obj):
 from .user import UserSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
+from .device_task import DeviceTaskSchema
 
 
 UserReadSchema = UserSchema()
