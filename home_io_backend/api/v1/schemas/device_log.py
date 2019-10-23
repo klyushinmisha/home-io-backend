@@ -7,7 +7,7 @@ __all__ = [
 
 import json
 
-from marshmallow import fields, validate, Schema, post_load
+from marshmallow import fields, validate, Schema
 from marshmallow_arrow import ArrowField
 
 from ....models import Device, DeviceLog
@@ -25,7 +25,7 @@ class DeviceLogSchema(Schema):
 
     created_at = ArrowField()
 
-    device_id = fields.Integer(
+    device_id = fields.UUID(
         required=True,
         validate=[
             lambda dev_id: Device.query.get(dev_id) is not None

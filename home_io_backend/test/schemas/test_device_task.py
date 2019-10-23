@@ -9,7 +9,7 @@ from marshmallow.exceptions import ValidationError
 
 
 @pytest.fixture(scope='function')
-def device_task(app, db):
+def device_id(app, db):
     with app.app_context():
         user = User(
             username='testuser',
@@ -26,9 +26,15 @@ def device_task(app, db):
             owner_id=user.id
         )
         db.session.add(device)
-        db.session.flush()
+        db.session.commit()
+        return device.id
+
+
+@pytest.fixture(scope='function')
+def device_task(app, db, device_id):
+    with app.app_context():
         dev_task = DeviceTask(
-            device_id=device.id,
+            device_id=device_id,
             task={
                 "task": "task1"
             }
@@ -63,31 +69,33 @@ class TestDeviceTaskCreateSchema:
         'task',
         (tuple(), )
     )
-    def test_invalid_device_task(self, task):
+    def test_invalid_device_task(self, app, task):
         try:
-            DeviceTaskCreateSchema.load(task)
-            assert False, 'Exception must occur'
+            with app.app_context():
+                DeviceTaskCreateSchema.load(task)
+                assert False, 'Exception must occur'
         except ValidationError as e:
             pass
 
     @pytest.mark.parametrize(
         'task',
-        ({"task": "task"},)
+        ({ "task": "task" },)
     )
-    def test_valid_data(self, task):
+    def test_valid_data(self, app, task, device_id):
         try:
-            print(task)
-            DeviceTaskCreateSchema.load(task)
+            with app.app_context():
+                task['device_id'] = device_id
+                DeviceTaskCreateSchema.load(task)
         except ValidationError as e:
             assert False, 'Can`t be ValidationError'
 
     @pytest.mark.parametrize(
-        'id, task, created_at, device_id',
+        'id, task, created_at',
         (
-            (1, {"task": "task"}, 'ANYTIME', uuid.uuid4()),
+            (1, {"task": "task"}, 'ANYTIME'),
         )
     )
-    def test_pass_not_allowed_keys(self, id, task, created_at, device_id):
+    def test_pass_not_allowed_keys(self, app, id, task, created_at, device_id):
         device_task_data = {
             'id': id,
             'task': task,
@@ -95,32 +103,32 @@ class TestDeviceTaskCreateSchema:
             'device_id': device_id,
         }
         try:
-            DeviceTaskCreateSchema.load(device_task_data)
-            assert False, 'Exception must occur'
+            with app.app_context():
+                DeviceTaskCreateSchema.load(device_task_data)
+                assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'id' in e.messages
             assert 'created_at' in e.messages
-            assert 'device_id' in e.messages
 
 
 class TestDeviceTaskUpdateSchema:
     @pytest.mark.parametrize(
-        'id, created_at, device_id',
-        ((1, 'ANYTIME', uuid.uuid4()),)
+        'id, created_at',
+        ((1, 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, id, created_at, device_id):
+    def test_pass_not_allowed_keys(self, app, id, created_at, device_id):
         device_task_data = {
             'id': id,
             'created_at': created_at,
             'device_id': device_id
         }
         try:
-            DeviceTaskUpdateSchema.load(device_task_data)
-            assert False, 'Exception must occur'
+            with app.app_context():
+                DeviceTaskUpdateSchema.load(device_task_data)
+                assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'id' in e.messages
             assert 'created_at' in e.messages
-            assert 'device_id' in e.messages
 
     @pytest.mark.parametrize(
         'task',
