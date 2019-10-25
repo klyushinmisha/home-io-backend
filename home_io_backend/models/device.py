@@ -33,7 +33,7 @@ class Device(db.Model):
         nullable=False
     )
 
-    registred_at = db.Column(
+    registered_at = db.Column(
         ArrowType,
         default=arrow.utcnow,
         onupdate=arrow.utcnow

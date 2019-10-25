@@ -74,42 +74,42 @@ class TestDeviceCreateSchema:
             assert False, 'Can`t be ValidationError'
 
     @pytest.mark.parametrize(
-        'id, name, device_type, owner_id, registred_at',
+        'id, name, device_type, owner_id, registered_at',
         ((uuid.uuid4(), 'test_device', 'blinker', 1, 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, id, name, device_type, owner_id, registred_at):
+    def test_pass_not_allowed_keys(self, id, name, device_type, owner_id, registered_at):
         device_data = {
             'id': id,
             'name': name,
             'device_type': device_type,
             'owner_id': owner_id,
-            'registred_at': registred_at
+            'registered_at': registered_at
         }
         try:
             DeviceCreateSchema.load(device_data)
             assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'id' in e.messages
-            assert 'registred_at' in e.messages
+            assert 'registered_at' in e.messages
             assert 'owner_id' in e.messages
 
 
 class TestDeviceUpdateSchema:
     @pytest.mark.parametrize(
-        'id, registred_at',
+        'id, registered_at',
         ((uuid.uuid4(), 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, id, registred_at):
+    def test_pass_not_allowed_keys(self, id, registered_at):
         device_data = {
             'id': id,
-            'registred_at': registred_at
+            'registered_at': registered_at
         }
         try:
             DeviceUpdateSchema.load(device_data)
             assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'id' in e.messages
-            assert 'registred_at' in e.messages
+            assert 'registered_at' in e.messages
 
     @pytest.mark.parametrize(
         'name, device_type',

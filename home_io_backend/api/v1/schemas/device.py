@@ -6,7 +6,6 @@ from ....models import Device, TypeEnum
 
 
 class DeviceSchema(Schema):
-
     model = Device
 
     id = fields.UUID()
@@ -19,17 +18,18 @@ class DeviceSchema(Schema):
         ]
     )
 
-    registred_at = ArrowField()
+    registered_at = ArrowField()
 
     device_type = EnumField(
         TypeEnum,
         validate=validate.OneOf(
-        [
-            TypeEnum.blinker,
-            TypeEnum.humidity_sensor,
-            TypeEnum.rangefinder
-        ]
-    ), required=True)
+            [
+                TypeEnum.blinker,
+                TypeEnum.humidity_sensor,
+                TypeEnum.rangefinder
+            ]
+        ), required=True
+    )
 
     owner_id = fields.Nested(
         'UserSchema',
