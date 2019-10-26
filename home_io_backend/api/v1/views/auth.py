@@ -4,7 +4,7 @@ __all__ = [
 
 from flask_jwt_extended import create_access_token
 from sqlalchemy.orm.exc import MultipleResultsFound
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_kwargs
 
 from ..responses.auth import LoginResponse
 from ..responses.user import UserNotFoundResponse, \
@@ -17,13 +17,12 @@ from ....models import User
 
 @api.route('/login', methods=['POST'])
 @json_mimetype_required
-@use_args(LoginSchema(), locations=("json",))
+@use_kwargs(LoginSchema(), locations=("json",))
 def login(username, password):
-    try:
-        user = User.query.filter(
-            User.username == username
-        ).one_or_none()
-    except MultipleResultsFound:
+    user = User.query.filter(
+        User.username == username
+    ).one_or_none()
+    if user is None:
         return UserNotFoundResponse()
     if user.check_password(password):
         access_token = create_access_token(identity=username)

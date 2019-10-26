@@ -9,6 +9,7 @@ from .api.v1.views import *
 from .api.v1 import api
 from .models import *
 from ..config import Config
+from .api.v1.responses.common import MethodNotAllowedResponse
 
 
 def create_app():
@@ -24,4 +25,9 @@ def create_app():
     if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
         create_database(app.config["SQLALCHEMY_DATABASE_URI"])
     app.register_blueprint(api, url_prefix='/api/v1')
+
+    @app.errorhandler(405)
+    def handle_method_not_allowed(error):
+        return MethodNotAllowedResponse()
+
     return app

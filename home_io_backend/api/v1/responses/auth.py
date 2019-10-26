@@ -1,10 +1,10 @@
 from . import JsonApiResponse
+from ..schemas import UserReadSchema
 
 
 class LoginResponse(JsonApiResponse):
     def __init__(self, token):
         response = {
-            'accessToken': token
+            'access_token': token
         }
-        status = 200
-        super().__init__(response, status)
+        super().__init__(response, 200)

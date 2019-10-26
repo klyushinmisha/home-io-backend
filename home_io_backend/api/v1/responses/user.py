@@ -1,27 +1,17 @@
-from . import JsonApiResponse
+from . import JsonApiResponse, JsonApiErrorResponse
 from ..schemas import UserReadSchema
 
 
 class UserResponse(JsonApiResponse):
     def __init__(self, user):
-        response = UserReadSchema.load(user)
-        status = 200
-        super().__init__(response, status)
+        super().__init__(UserReadSchema.load(user), 200)
 
 
-class UserNotFoundResponse(JsonApiResponse):
+class UserNotFoundResponse(JsonApiErrorResponse):
     def __init__(self):
-        response = {
-            'errorCode': 'userNotFound'
-        }
-        status = 404
-        super().__init__(response, status)
+        super().__init__('userNotFound', 404)
 
 
-class UserInvalidPasswordResponse(JsonApiResponse):
+class UserInvalidPasswordResponse(JsonApiErrorResponse):
     def __init__(self):
-        response = {
-            'errorCode': 'userInvalidPassword'
-        }
-        status = 400
-        super().__init__(response, status)
+        super().__init__('userInvalidPassword', 400)

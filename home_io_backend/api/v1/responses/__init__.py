@@ -12,28 +12,15 @@ class JsonApiResponse(Response):
         )
 
 
-class JsonMimetypeRequiredResponse(JsonApiResponse):
-    def __init__(self):
+class JsonApiErrorResponse(Response):
+    def __init__(self, error_code, status, body=None):
         response = {
-            'errorCode': 'jsonMimetypeRequired'
+            'error_code': error_code
         }
-        status = 400
-        super().__init__(response, status)
-
-
-class MimetypeValidationError(JsonApiResponse):
-    def __init__(self):
-        response = {
-            'errorCode': 'mimetypeValidationError'
-        }
-        status = 400
-        super().__init__(response, status)
-
-
-class JsonValidationErrorResponse(JsonApiResponse):
-    def __init__(self):
-        response = {
-            'errorCode': 'jsonValidationError'
-        }
-        status = 400
-        super().__init__(response, status)
+        if body is not None:
+            response['data'] = body
+        super().__init__(
+            json.dumps(response),
+            status,
+            mimetype='application/json'
+        )

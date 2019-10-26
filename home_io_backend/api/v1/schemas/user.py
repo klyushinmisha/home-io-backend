@@ -1,5 +1,7 @@
 from marshmallow import fields, validate, Schema
+from marshmallow.exceptions import ValidationError
 from marshmallow_arrow import ArrowField
+from sqlalchemy.orm.exc import MultipleResultsFound
 
 from ....models import User
 
@@ -14,12 +16,7 @@ class UserSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=8, max=32),
-            validate.Regexp(r"[\w]+"),
-            lambda username: (
-                User.query.filter(
-                    User.username == username
-                ).one_or_none is None
-            )
+            validate.Regexp(r"[\w]+")
         ]
     )
 

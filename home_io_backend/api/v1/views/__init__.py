@@ -1,10 +1,13 @@
 import functools
+from ...v1 import api
 
 from flask import request
 from webargs import flaskparser
+from marshmallow.exceptions import ValidationError
 
-from ..responses import JsonMimetypeRequiredResponse, \
-    MimetypeValidationError, JsonValidationErrorResponse
+from ..responses.common import JsonMimetypeRequiredResponse,\
+    MimetypeValidationError, JsonValidationErrorResponse,\
+    InvalidBodyErrorResponse, MethodNotAllowedResponse
 
 
 def json_mimetype_required(view):
@@ -27,20 +30,9 @@ def mimetype_required(*mimetypes):
     return decorator
 
 
-parser = flaskparser.FlaskParser()
-
-
-def use_args(*args, **kwargs):
-    def decorator(view):
-        @functools.wraps(view)
-        def wrapper(*args, **kwargs):
-            try:
-                parser.parse(locations=('query', ))
-            except:
-                return JsonValidationErrorResponse()
-            return view(*args, **kwargs)
-        return wrapper
-    return decorator
+@api.errorhandler(422)
+def handle_unprocessible(error):
+    return InvalidBodyErrorResponse()
 
 
 from .auth import *
