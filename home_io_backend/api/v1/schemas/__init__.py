@@ -5,16 +5,17 @@ def create_instance(schema, json):
 
 def update_instance(schema, json, obj):
     data = schema.load(json)
-    for k, v in proc_data:
+    for k, v in data:
         setattr(obj, k, v)
-    return schema.model(**data)
 
 
+from .auth import TokenSchema
 from .user import UserSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
 from .device_task import DeviceTaskSchema
 
+TokenReadSchema = TokenSchema()
 
 UserReadSchema = UserSchema()
 UsersReadSchema = UserSchema(many=True)
@@ -29,10 +30,10 @@ UserUpdateSchema = UserSchema(
 DeviceReadSchema = DeviceSchema()
 DevicesReadSchema = DeviceSchema(many=True)
 DeviceCreateSchema = DeviceSchema(
-    exclude=('id', 'registred_at', 'owner_id')
+    exclude=('id', 'registered_at', 'owner_id')
 )
 DeviceUpdateSchema = DeviceSchema(
-    exclude=('id', 'registred_at', 'owner_id'),
+    exclude=('id', 'registered_at', 'owner_id'),
     partial=True
 )
 
@@ -65,6 +66,9 @@ DeviceTaskUpdateSchema = DeviceTaskSchema(
 )
 
 __all__ = [
+    # auth schemas
+    'TokenReadSchema',
+
     # user schemas
     'UserReadSchema',
     'UsersReadSchema',
