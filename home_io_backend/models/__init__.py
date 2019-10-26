@@ -1,8 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 from sqlalchemy.ext import baked
 
 db = SQLAlchemy()
 db.bakery = baked.bakery()
+
+bcrypt = Bcrypt()
 
 from .user import User
 from .device import Device, TypeEnum
