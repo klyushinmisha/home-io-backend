@@ -1,11 +1,11 @@
 import uuid
 
 import pytest
+from marshmallow.exceptions import ValidationError
 
-from ...models import Device, User, TypeEnum
 from ...api.v1.schemas import DeviceReadSchema, DevicesReadSchema, \
     DeviceCreateSchema, DeviceUpdateSchema
-from marshmallow.exceptions import ValidationError
+from ...models import Device, User, TypeEnum
 
 
 @pytest.fixture(scope='function')

@@ -3,15 +3,13 @@ __all__ = [
 ]
 
 from flask_jwt_extended import create_access_token
-from sqlalchemy.orm.exc import MultipleResultsFound
 from webargs.flaskparser import use_kwargs
 
-from ..responses.auth import LoginResponse
-from ..responses.user import UserNotFoundResponse, \
-    UserInvalidPasswordResponse
-from . import json_mimetype_required
 from .. import api
+from ..responses.auth import LoginResponse
+from ..responses.user import *
 from ..schemas.auth import LoginSchema
+from ..view_decorators import json_mimetype_required
 from ....models import User
 
 

@@ -1,9 +1,9 @@
 import pytest
+from marshmallow.exceptions import ValidationError
 
-from ...models import User
 from ...api.v1.schemas import UserReadSchema, UsersReadSchema, \
     UserCreateSchema, UserUpdateSchema
-from marshmallow.exceptions import ValidationError
+from ...models import User
 
 
 @pytest.fixture(scope='function')

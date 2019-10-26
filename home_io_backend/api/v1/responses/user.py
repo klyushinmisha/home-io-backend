@@ -1,5 +1,11 @@
-from . import JsonApiResponse, JsonApiErrorResponse
 from ..schemas import UserReadSchema
+from ...common.responses import JsonApiResponse, JsonApiErrorResponse
+
+__all__ = [
+    'UserResponse',
+    'UserNotFoundResponse',
+    'UserInvalidPasswordResponse',
+]
 
 
 class UserResponse(JsonApiResponse):

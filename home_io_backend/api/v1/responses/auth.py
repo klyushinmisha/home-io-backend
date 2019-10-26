@@ -1,5 +1,9 @@
-from . import JsonApiResponse
-from ..schemas import UserReadSchema
+from ...common.responses import JsonApiResponse
+
+
+__all__ = [
+    'LoginResponse',
+]
 
 
 class LoginResponse(JsonApiResponse):

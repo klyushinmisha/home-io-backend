@@ -1,7 +1,5 @@
 from marshmallow import fields, validate, Schema
-from marshmallow.exceptions import ValidationError
 from marshmallow_arrow import ArrowField
-from sqlalchemy.orm.exc import MultipleResultsFound
 
 from ....models import User
 

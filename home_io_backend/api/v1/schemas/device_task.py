@@ -1,4 +1,4 @@
-from marshmallow import fields, validate, Schema
+from marshmallow import fields, Schema
 from marshmallow_arrow import ArrowField
 
 from ....models import DeviceTask, Device

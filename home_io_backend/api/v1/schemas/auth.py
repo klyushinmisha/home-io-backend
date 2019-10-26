@@ -17,9 +17,3 @@ class LoginSchema(Schema):
             validate.Regexp(r"[\w]+")
         ]
     )
-
-
-class TokenSchema(Schema):
-    access_token = fields.String()
-
-    user_id = fields.Integer()

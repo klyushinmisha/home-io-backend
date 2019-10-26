@@ -1,21 +1,37 @@
-def create_instance(schema, json):
-    data = schema.load(json)
-    return schema.model(**data)
+__all__ = [
+    # user schemas
+    'UserReadSchema',
+    'UsersReadSchema',
+    'UserCreateSchema',
+    'UserUpdateSchema',
+
+    # device schemas
+    'DeviceReadSchema',
+    'DevicesReadSchema',
+    'DeviceCreateSchema',
+    'DeviceUpdateSchema',
+
+    # device log schemas
+    'DeviceLogReadSchema',
+    'DeviceLogsReadSchema',
+    'DeviceLogCreateSchema',
+    'DeviceLogsCreateSchema',
+    'DeviceLogUpdateSchema',
+
+    # device task schemas
+    'DeviceTaskReadSchema',
+    'DeviceTasksReadSchema',
+    'DeviceTaskCreateSchema',
+    'DeviceTasksCreateSchema',
+    'DeviceTaskUpdateSchema'
+]
 
 
-def update_instance(schema, json, obj):
-    data = schema.load(json)
-    for k, v in data:
-        setattr(obj, k, v)
-
-
-from .auth import TokenSchema
-from .user import UserSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
 from .device_task import DeviceTaskSchema
+from .user import UserSchema
 
-TokenReadSchema = TokenSchema()
 
 UserReadSchema = UserSchema()
 UsersReadSchema = UserSchema(many=True)
@@ -64,34 +80,3 @@ DeviceTaskUpdateSchema = DeviceTaskSchema(
     exclude=('id', 'created_at'),
     partial=True
 )
-
-__all__ = [
-    # auth schemas
-    'TokenReadSchema',
-
-    # user schemas
-    'UserReadSchema',
-    'UsersReadSchema',
-    'UserCreateSchema',
-    'UserUpdateSchema',
-
-    # device schemas
-    'DeviceReadSchema',
-    'DevicesReadSchema',
-    'DeviceCreateSchema',
-    'DeviceUpdateSchema',
-
-    # device log schemas
-    'DeviceLogReadSchema',
-    'DeviceLogsReadSchema',
-    'DeviceLogCreateSchema',
-    'DeviceLogsCreateSchema',
-    'DeviceLogUpdateSchema',
-
-    # device task schemas
-    'DeviceTaskReadSchema',
-    'DeviceTasksReadSchema',
-    'DeviceTaskCreateSchema',
-    'DeviceTasksCreateSchema',
-    'DeviceTaskUpdateSchema'
-]

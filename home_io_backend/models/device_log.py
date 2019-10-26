@@ -1,5 +1,5 @@
 import arrow
-from sqlalchemy_utils import ArrowType, JSONType, UUIDType
+from sqlalchemy_utils import ArrowType, JSONType
 
 from . import db
 
