@@ -1,4 +1,4 @@
-"""This module used to set error handlers for common HTTP errors."""
+'''This module used to set error handlers for common HTTP errors.'''
 
 from flask import current_app
 

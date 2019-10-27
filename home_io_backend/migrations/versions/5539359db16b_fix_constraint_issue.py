@@ -1,10 +1,10 @@
-"""fix constraint issue
+'''fix constraint issue
 
 Revision ID: 5539359db16b
 Revises: db6a841c4ac2
 Create Date: 2019-10-09 19:27:02.922711
 
-"""
+'''
 from alembic import op
 
 revision = '5539359db16b'

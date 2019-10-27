@@ -6,7 +6,7 @@ from . import db
 
 class DeviceTask(db.Model):
 
-    __tablename__ = "device_task"
+    __tablename__ = 'device_task'
 
     baked_query = db.bakery(lambda session: session.query(DeviceTask))
 

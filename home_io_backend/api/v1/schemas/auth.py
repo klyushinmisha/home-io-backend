@@ -6,7 +6,7 @@ class LoginSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=8, max=32),
-            validate.Regexp(r"[\w]+")
+            validate.Regexp(r'[\w]+')
         ]
     )
 
@@ -14,6 +14,6 @@ class LoginSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=8, max=32),
-            validate.Regexp(r"[\w]+")
+            validate.Regexp(r'[\w]+')
         ]
     )

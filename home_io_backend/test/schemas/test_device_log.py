@@ -72,9 +72,9 @@ class TestDeviceLogReadSchema:
 class TestDeviceLogCreateSchema:
     @pytest.mark.parametrize(
         'device_id, log',
-        (('ffebed83-957b-49e4-ba70-b1b1f53004ad', {"log": "test"}),
-         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"another_log": "loglog"}),
-         ('febf8c05-6fc1-4834-8ee4-998420dd2d1a', {"access": "success"}),)
+        (('ffebed83-957b-49e4-ba70-b1b1f53004ad', {'log': 'test'}),
+         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {'another_log': 'loglog'}),
+         ('febf8c05-6fc1-4834-8ee4-998420dd2d1a', {'access': 'success'}),)
     )
     def test_invalid_device_id(self, app, device_id, log):
         dev_log = {
@@ -91,7 +91,7 @@ class TestDeviceLogCreateSchema:
 
     @pytest.mark.parametrize(
         'log_id, created_at, device_id, log',
-        ((1, arrow.now(), 'edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"key": "value"}), )
+        ((1, arrow.now(), 'edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {'key': 'value'}), )
     )
     def test_pass_not_allowed_keys(self, app, log_id, created_at, device_id, log):
         dev_log = {
@@ -110,7 +110,7 @@ class TestDeviceLogCreateSchema:
 
     @pytest.mark.parametrize(
         'log',
-        ({"log": "test"}, )
+        ({'log': 'test'}, )
     )
     def test_valid_data(self, app, device_id, log):
         dev_log = {

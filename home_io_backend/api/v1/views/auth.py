@@ -15,7 +15,7 @@ from ....models import User
 
 @api.route('/login', methods=['POST'])
 @json_mimetype_required
-@use_kwargs(LoginSchema(), locations=("json",))
+@use_kwargs(LoginSchema(), locations=('json',))
 def login(username, password):
     user = User.query.filter(
         User.username == username

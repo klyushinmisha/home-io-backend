@@ -6,13 +6,13 @@ from sqlalchemy import bindparam
 from ...models import DeviceLog, Device, User, TypeEnum
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def device_log_id(app, db):
     with app.app_context():
         user = User(
-            username="username",
-            email="afsfkask@mail.ru",
-            password="password"
+            username='username',
+            email='afsfkask@mail.ru',
+            password='password'
         )
 
         db.session.add(user)
@@ -20,7 +20,7 @@ def device_log_id(app, db):
 
         device = Device(
             id=uuid.uuid4(),
-            name="device_name",
+            name='device_name',
             device_type=TypeEnum.blinker
         )
 
@@ -28,7 +28,7 @@ def device_log_id(app, db):
         db.session.flush()
 
         device_log = DeviceLog(
-            log={"name": "log1"}
+            log={'name': 'log1'}
         )
         device.device_logs.append(device_log)
         db.session.commit()
@@ -40,9 +40,9 @@ class TestDeviceLog:
     def test_create(self, app, db):
         with app.app_context():
             user = User(
-                username="username",
-                email="afsfkask@mail.ru",
-                password="password"
+                username='username',
+                email='afsfkask@mail.ru',
+                password='password'
             )
 
             db.session.add(user)
@@ -50,7 +50,7 @@ class TestDeviceLog:
 
             device = Device(
                 id=uuid.uuid4(),
-                name="device_name",
+                name='device_name',
                 device_type=TypeEnum.blinker
             )
 
@@ -58,7 +58,7 @@ class TestDeviceLog:
             db.session.flush()
 
             device_log = DeviceLog(
-                log={"name": "log1"}
+                log={'name': 'log1'}
             )
             device.device_logs.append(device_log)
             db.session.commit()
@@ -82,16 +82,16 @@ class TestDeviceLog:
     def test_update(self, app, db, device_log_id):
         with app.app_context():
             bq = DeviceLog.baked_query + (lambda q: q
-                                          .filter(DeviceLog.id == bindparam("device_log_id")))
+                                          .filter(DeviceLog.id == bindparam('device_log_id')))
             bq_params = {
-                "device_log_id": device_log_id
+                'device_log_id': device_log_id
             }
 
             device_log = (bq(app.db.session())
                           .params(bq_params)
                           .one_or_none())
             device_log.log = {
-                "log": "newlog"
+                'log': 'newlog'
             }
             db.session.add(device_log)
             db.session.commit()
@@ -100,9 +100,9 @@ class TestDeviceLog:
     def test_delete(self, app, db, device_log_id):
         with app.app_context():
             bq = DeviceLog.baked_query + (lambda q: q
-                                          .filter(DeviceLog.id == bindparam("device_log_id")))
+                                          .filter(DeviceLog.id == bindparam('device_log_id')))
             bq_params = {
-                "device_log_id": device_log_id
+                'device_log_id': device_log_id
             }
 
             device_log = (bq(app.db.session())

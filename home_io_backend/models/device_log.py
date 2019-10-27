@@ -5,7 +5,7 @@ from . import db
 
 
 class DeviceLog(db.Model):
-    __tablename__ = "device_log"
+    __tablename__ = 'device_log'
 
     baked_query = db.bakery(lambda session: session.query(DeviceLog))
 

@@ -35,7 +35,7 @@ def device_task(app, db, device_id):
         dev_task = DeviceTask(
             device_id=device_id,
             task={
-                "task": "task1"
+                'task': 'task1'
             }
         )
         db.session.add(dev_task)
@@ -78,7 +78,7 @@ class TestDeviceTaskCreateSchema:
 
     @pytest.mark.parametrize(
         'task',
-        ({ "task": "task" },)
+        ({ 'task': 'task' },)
     )
     def test_valid_data(self, app, task, device_id):
         try:
@@ -91,7 +91,7 @@ class TestDeviceTaskCreateSchema:
     @pytest.mark.parametrize(
         'id, task, created_at',
         (
-            (1, {"task": "task"}, 'ANYTIME'),
+            (1, {'task': 'task'}, 'ANYTIME'),
         )
     )
     def test_pass_not_allowed_keys(self, app, id, task, created_at, device_id):
@@ -131,7 +131,7 @@ class TestDeviceTaskUpdateSchema:
 
     @pytest.mark.parametrize(
         'task',
-        (({"task": "task"}, ),)
+        (({'task': 'task'}, ),)
     )
     def test_partial_update(self, task):
         device_task_data = {

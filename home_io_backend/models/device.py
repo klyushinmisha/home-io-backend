@@ -17,7 +17,7 @@ class TypeEnum(enum.Enum):
 
 class Device(db.Model):
 
-    __tablename__ = "device"
+    __tablename__ = 'device'
 
     baked_query = db.bakery(lambda session: session.query(Device))
 

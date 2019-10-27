@@ -6,7 +6,7 @@ from .device import Device
 
 
 class User(db.Model):
-    __tablename__ = "user"
+    __tablename__ = 'user'
 
     baked_query = db.bakery(lambda session: session.query(User))
 

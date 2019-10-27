@@ -1,10 +1,10 @@
-"""fix typo in word registered
+'''fix typo in word registered
 
 Revision ID: 6468651f0dfa
 Revises: 5539359db16b
 Create Date: 2019-10-25 21:37:35.488267
 
-"""
+'''
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy.dialects import postgresql

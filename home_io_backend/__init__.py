@@ -33,8 +33,8 @@ def create_app():
     JWTManager(app)
 
     # create database if not exists
-    if not database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
-        create_database(app.config["SQLALCHEMY_DATABASE_URI"])
+    if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
+        create_database(app.config['SQLALCHEMY_DATABASE_URI'])
 
     # bind api blueprints
     app.register_blueprint(api, url_prefix='/api/v1')

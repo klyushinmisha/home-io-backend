@@ -1,10 +1,10 @@
-"""add base models
+'''add base models
 
 Revision ID: db6a841c4ac2
 Revises:
 Create Date: 2019-10-05 12:18:33.101643
 
-"""
+'''
 from alembic import op
 import sqlalchemy as sa
 import sqlalchemy_utils

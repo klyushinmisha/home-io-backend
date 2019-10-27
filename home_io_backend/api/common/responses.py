@@ -1,4 +1,4 @@
-"""This module contains common JSON responses."""
+'''This module contains common JSON responses.'''
 
 import json
 
@@ -17,8 +17,8 @@ __all__ = [
 
 
 class JsonApiResponse(Response):
-    """Custom JSON response.
-    This is a base class for other API responses."""
+    '''Custom JSON response.
+    This is a base class for other API responses.'''
     def __init__(self, response, status):
         super().__init__(
             json.dumps(response),
@@ -28,8 +28,8 @@ class JsonApiResponse(Response):
 
 
 class JsonApiErrorResponse(Response):
-    """Custom JSON error response.
-    This is a base class for other API responses."""
+    '''Custom JSON error response.
+    This is a base class for other API responses.'''
     def __init__(self, error_code, status, body=None):
         response = {
             'error_code': error_code

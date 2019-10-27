@@ -10,16 +10,16 @@ from ...models import Device, User, TypeEnum, DeviceTask
 def dev_task_id(app, db):
     with app.app_context():
         user = User(
-            email="hi@gmail.com",
-            username="newUser",
-            password="password"
+            email='hi@gmail.com',
+            username='newUser',
+            password='password'
         )
         db.session.add(user)
         db.session.flush()
 
         dev = Device(
             id=uuid.uuid4(),
-            name="deviceD",
+            name='deviceD',
             device_type=TypeEnum.blinker,
             owner_id=user.id
         )
@@ -29,7 +29,7 @@ def dev_task_id(app, db):
         dev_task = DeviceTask(
             device_id=dev.id,
             task={
-                "task": "mainTask"
+                'task': 'mainTask'
             }
         )
         db.session.add(dev_task)
@@ -41,16 +41,16 @@ class TestDeviceTask():
     def test_create(self,app, db):
         with app.app_context():
             user = User(
-                email = "privet@gmail.com",
-                username="mainUser",
-                password = "password"
+                email = 'privet@gmail.com',
+                username='mainUser',
+                password = 'password'
             )
             db.session.add(user)
             db.session.flush()
 
             dev = Device(
                 id=uuid.uuid4(),
-                name = "deviceName",
+                name = 'deviceName',
                 device_type = TypeEnum.blinker,
                 owner_id= user.id
             )
@@ -60,7 +60,7 @@ class TestDeviceTask():
             dev_task = DeviceTask(
                 device_id= dev.id,
                 task = {
-                    "task": "mainTask"
+                    'task': 'mainTask'
                 }
             )
             db.session.add(dev_task)

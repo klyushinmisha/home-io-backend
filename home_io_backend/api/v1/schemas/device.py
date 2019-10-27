@@ -14,7 +14,7 @@ class DeviceSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=4, max=32),
-            validate.Regexp(r"[\w]+")
+            validate.Regexp(r'[\w]+')
         ]
     )
 

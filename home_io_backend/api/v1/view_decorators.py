@@ -1,5 +1,5 @@
-"""This module contains view decorators.
-It can be helpful for mimetype check and etc."""
+'''This module contains view decorators.
+It can be helpful for mimetype check and etc.'''
 
 import functools
 
