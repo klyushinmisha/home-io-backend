@@ -1,6 +1,6 @@
-import arrow
 import enum
 
+import arrow
 from sqlalchemy import Enum
 from sqlalchemy_utils import ArrowType, UUIDType
 

@@ -2,9 +2,8 @@ import uuid
 
 import pytest
 from sqlalchemy import bindparam
-from sqlalchemy_utils import JSONType, ArrowType
 
-from ...models import DeviceLog, Device, User, TypeEnum, DeviceTask
+from ...models import Device, User, TypeEnum, DeviceTask
 
 
 @pytest.fixture(scope='function')

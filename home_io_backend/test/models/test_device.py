@@ -3,8 +3,8 @@ import uuid
 import pytest
 from sqlalchemy import bindparam
 
-from ...models.device import Device, TypeEnum
 from ...models import User
+from ...models.device import Device, TypeEnum
 
 
 @pytest.fixture(scope='function')

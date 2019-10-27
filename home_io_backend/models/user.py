@@ -1,9 +1,7 @@
 import arrow
-from flask_bcrypt import Bcrypt, \
-    generate_password_hash, check_password_hash
 from sqlalchemy_utils import ArrowType
 
-from . import db
+from . import db, bcrypt
 from .device import Device
 
 
@@ -27,10 +25,10 @@ class User(db.Model):
 
     @password.setter
     def password(self, value):
-        self._password_hash = generate_password_hash(value)
+        self._password_hash = bcrypt.generate_password_hash(value)
 
     def check_password(self, value):
-        check_password_hash(self._password_hash, value)
+        return bcrypt.check_password_hash(self._password_hash, value)
 
     created_at = db.Column(
         ArrowType,
