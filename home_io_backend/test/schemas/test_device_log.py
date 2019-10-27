@@ -1,32 +1,71 @@
-import pytest
 import uuid
-from ...models import DeviceLog
-from ...api.v1.schemas import DeviceLogReadSchema, DeviceLogsReadSchema, \
-    DeviceLogCreateSchema, DeviceLogsCreateSchema, DeviceLogUpdateSchema
-from marshmallow.exceptions import ValidationError
+
 import arrow
+import pytest
+from marshmallow.exceptions import ValidationError
+
+from ...api.v1.schemas import DeviceLogReadSchema, DeviceLogCreateSchema, DeviceLogUpdateSchema
+from ...models import DeviceLog, User, Device, TypeEnum
 
 
 @pytest.fixture(scope='function')
-def dev_log(app, db):
+def device_id(app, db):
     with app.app_context():
-        # create user to read
-        dev_log = DeviceLog(
-            device_id= uuid.UUID("ffebed83-957b-49e4-ba70-b1b1f53004ad"),
-            log = {"logs" : "test"}
+        user = User(
+            username='testuser',
+            email='testuser@mail.com',
+            password='TestPassword'
         )
-        db.session.add(dev_log)
+        db.session.add(user)
+        db.session.flush()
+
+        device = Device(
+            id=uuid.uuid4(),
+            name='testdevice',
+            device_type=TypeEnum.blinker,
+            owner_id=user.id
+        )
+        db.session.add(device)
         db.session.commit()
-        return dev_log
+        return device.id
+
+
+@pytest.fixture(scope='function')
+def device_log(app, db):
+    with app.app_context():
+        user = User(
+            username='testuser',
+            email='testuser@mail.com',
+            password='TestPassword'
+        )
+        db.session.add(user)
+        db.session.flush()
+
+        device = Device(
+            id=uuid.uuid4(),
+            name='testdevice',
+            device_type=TypeEnum.blinker,
+            owner_id=user.id
+        )
+        db.session.add(device)
+        db.session.flush()
+
+        device_log = DeviceLog(
+            log={
+                'test': 'log'
+            }
+        )
+        device.device_logs.append(device_log)
+        db.session.commit()
 
 
 class TestDeviceLogReadSchema:
-    def test_read(self, app):
+    def test_read(self, app, device_log):
         with app.app_context():
             dev_log = DeviceLog.query.all()[0]
             try:
-                res = DeviceLogReadSchema.dump(dev_log)
-            except ValidationError as e:
+                DeviceLogReadSchema.dump(dev_log)
+            except ValidationError:
                 assert False, 'Can`t be ValidationError'
 
 
@@ -34,106 +73,92 @@ class TestDeviceLogCreateSchema:
     @pytest.mark.parametrize(
         'device_id, log',
         (('ffebed83-957b-49e4-ba70-b1b1f53004ad', {"log": "test"}),
-         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"idi": "kukuruzu_ohranyai"}),
+         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"another_log": "loglog"}),
          ('febf8c05-6fc1-4834-8ee4-998420dd2d1a', {"access": "success"}),)
     )
-    def test_invalid_device_id(self, device_id, log):
+    def test_invalid_device_id(self, app, device_id, log):
         dev_log = {
             'device_id': device_id,
             'log': log
         }
         try:
-            DeviceLogCreateSchema.load(dev_log)
+            with app.app_context():
+                DeviceLogCreateSchema.load(dev_log)
             assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'device_id' in e.messages
 
-    @pytest.mark.parametrize(
-        'device_id, log',
-        (('ffebed83-957b-49e4-ba70-b1b1f53004ad', {"log": "test"}),
-         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"idi": "kukuruzu_ohranyai"}),
-         ('febf8c05-6fc1-4834-8ee4-998420dd2d1a', {"access": "success"}),)
-    )
-    def test_invalid_email(self, device_id, log):
-        dev_log = {
-            'device_id': device_id,
-            'log': log
-        }
-        try:
-            DeviceLogCreateSchema.load(dev_log)
-            assert False, 'Exception must occur'
-        except ValidationError as e:
-            assert 'log' in e.messages
-
 
     @pytest.mark.parametrize(
-        'id, created_at, device_id, log',
-        ((1,arrow.now() , 'mail@mail.com', 'edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"you_are": "gay"}), )
+        'log_id, created_at, device_id, log',
+        ((1, arrow.now(), 'edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {"key": "value"}), )
     )
-    def test_pass_not_allowed_keys(self, id, created_at, device_id, log):
+    def test_pass_not_allowed_keys(self, app, log_id, created_at, device_id, log):
         dev_log = {
-            'id': id,
+            'id': log_id,
             'created_at': created_at,
             'device_id': device_id,
             'log': log,
         }
         try:
-            DeviceLogCreateSchema.load(dev_log)
+            with app.app_context():
+                DeviceLogCreateSchema.load(dev_log)
             assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'id' in e.messages
             assert 'created_at' in e.messages
 
     @pytest.mark.parametrize(
-        'device_id, log',
-        ('ffebed83-957b-49e4-ba70-b1b1f53004ad', {"log": "test"}))
-    def test_valid_data(self, device_id, log):
+        'log',
+        ({"log": "test"}, )
+    )
+    def test_valid_data(self, app, device_id, log):
         dev_log = {
             'device_id': device_id,
             'log': log,
         }
         try:
-            DeviceLogCreateSchema.load(dev_log)
+            with app.app_context():
+                DeviceLogCreateSchema.load(dev_log)
         except ValidationError as e:
             assert False, 'Can`t be ValidationError'
 
 
-class TestUserUpdateSchema:
+class TestDeviceUpdateSchema:
     @pytest.mark.parametrize(
-        'device_id, created_at',
-        (("ffebed83-957b-49e4-ba70-b1b1f53004ad", arrow.now()), )
+        'created_at',
+        (arrow.now(), )
     )
-    def test_pass_not_allowed_keys(self, device_id, created_at):
+    def test_pass_not_allowed_keys(self, app, device_id, created_at):
         dev_log = {
             'device_id': device_id,
             'created_at': created_at
         }
         try:
-            DeviceLogUpdateSchema.load(dev_log)
+            with app.app_context():
+                DeviceLogUpdateSchema.load(dev_log)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'id' in e.messages
             assert 'created_at' in e.messages
 
-    @pytest.mark.parametrize(
-        'id',
-        ((5), )
-    )
-    def test_partial_update(self, id):
+    def test_partial_update(self, app):
         dev_log = {
-            'id': id,
+            'log': {
+                'test': 'msg'
+            },
         }
         try:
-            DeviceLogUpdateSchema.load(dev_log)
-        except ValidationError as e:
+            with app.app_context():
+                DeviceLogUpdateSchema.load(dev_log)
+        except ValidationError:
             assert False, 'Can`t be ValidationError'
 
 
-class TestUsersReadSchema:
+class TestDevicesReadSchema:
     def test_read(self, app):
         with app.app_context():
             dev_logs = DeviceLog.query.all()
             try:
-                res = DeviceLogReadSchema.dump(dev_logs)
-            except ValidationError as e:
+                DeviceLogReadSchema.dump(dev_logs)
+            except ValidationError:
                 assert False, 'Can`t be ValidationError'
