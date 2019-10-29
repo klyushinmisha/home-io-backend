@@ -5,6 +5,7 @@ __all__ = [
     'UserResponse',
     'UserNotFoundResponse',
     'UserInvalidPasswordResponse',
+    'UserAlreadyExistResponse',
 ]
 
 
@@ -21,3 +22,8 @@ class UserNotFoundResponse(JsonApiErrorResponse):
 class UserInvalidPasswordResponse(JsonApiErrorResponse):
     def __init__(self):
         super().__init__('userInvalidPassword', 400)
+
+
+class UserAlreadyExistResponse(JsonApiErrorResponse):
+    def __init__(self):
+        super().__init__('userAlreadyExist', 400)
