@@ -11,11 +11,12 @@ from ..responses.user import *
 from ..schemas.auth import LoginSchema
 from ..view_decorators import json_mimetype_required
 from ....models import User
+from . import parser
 
 
 @api.route('/login', methods=['POST'])
 @json_mimetype_required
-@use_kwargs(LoginSchema(), locations=('json',))
+@parser.use_kwargs(LoginSchema(), locations=('json',))
 def login(username, password):
     user = User.query.filter(
         User.username == username

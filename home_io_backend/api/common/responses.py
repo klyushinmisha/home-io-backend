@@ -59,8 +59,8 @@ class MimetypeValidationErrorResponse(JsonApiErrorResponse):
 
 
 class BadRequestResponse(JsonApiErrorResponse):
-    def __init__(self):
-        super().__init__('badRequestError', 400)
+    def __init__(self, body=None):
+        super().__init__('badRequestError', 400, body=body)
 
 
 class NotFoundResponse(JsonApiErrorResponse):

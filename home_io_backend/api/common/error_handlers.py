@@ -1,6 +1,7 @@
 '''This module used to set error handlers for common HTTP errors.'''
 
 from flask import current_app
+from marshmallow.exceptions import MarshmallowError
 
 from ..common.responses import *
 
@@ -28,3 +29,8 @@ def handle_method_not_allowed(error):
 @current_app.errorhandler(422)
 def handle_unprocessable_entity(error):
     return InvalidBodyResponse()
+
+
+@current_app.errorhandler(MarshmallowError)
+def handle_validation_error(error):
+    return BadRequestResponse(error.args[0].messages)
