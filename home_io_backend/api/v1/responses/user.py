@@ -5,13 +5,14 @@ __all__ = [
     'UserResponse',
     'UserNotFoundResponse',
     'UserInvalidPasswordResponse',
-    'UserAlreadyExistResponse',
+    'UsernameAlreadyExistResponse',
+    'EmailAlreadyExistResponse',
 ]
 
 
 class UserResponse(JsonApiResponse):
     def __init__(self, user):
-        super().__init__(UserReadSchema.load(user), 200)
+        super().__init__(UserReadSchema.dump(user), 200)
 
 
 class UserNotFoundResponse(JsonApiErrorResponse):
@@ -24,6 +25,12 @@ class UserInvalidPasswordResponse(JsonApiErrorResponse):
         super().__init__('userInvalidPassword', 400)
 
 
-class UserAlreadyExistResponse(JsonApiErrorResponse):
+class UsernameAlreadyExistResponse(JsonApiErrorResponse):
     def __init__(self):
-        super().__init__('userAlreadyExist', 400)
+        super().__init__('usernameAlreadyExist', 400)
+
+
+
+class EmailAlreadyExistResponse(JsonApiErrorResponse):
+    def __init__(self):
+        super().__init__('emailAlreadyExist', 400)
