@@ -5,13 +5,15 @@ from flask import current_app
 from ..common.responses import *
 
 __all__ = [
+    'handle_bad_request',
+    'handle_not_found',
     'handle_method_not_allowed',
     'handle_unprocessable_entity',
 ]
 
 
 @current_app.errorhandler(400)
-def handle_unprocessable_entity(error):
+def handle_bad_request(error):
     return BadRequestResponse()
 
 

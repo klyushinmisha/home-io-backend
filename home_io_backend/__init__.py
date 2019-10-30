@@ -41,6 +41,7 @@ def create_app():
 
     # setup HTTP error handlers
     with app.app_context():
-        from .api.common.error_handlers import handle_method_not_allowed, handle_unprocessable_entity
+        from .api.common.error_handlers import handle_method_not_allowed,\
+            handle_not_found, handle_unprocessable_entity, handle_bad_request
 
     return app
