@@ -1,7 +1,5 @@
 import pytest
 
-from .. import create_app
-
 
 def pytest_make_parametrize_id(config, val):
     return repr(val)
@@ -9,7 +7,8 @@ def pytest_make_parametrize_id(config, val):
 
 @pytest.fixture(scope='module')
 def app():
-    return create_app()
+    from .. import app
+    return app
 
 
 @pytest.fixture(scope='function')
