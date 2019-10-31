@@ -3,7 +3,8 @@ from webargs.flaskparser import use_kwargs
 
 from .. import api
 from ..responses.user import *
-from ..schemas import UserCreateSchema
+from ..schemas import UserCreateSchema, UserUpdateSchema
+from ..schemas.utils import update_instance
 from ..view_decorators import json_mimetype_required
 from ....models import User, db
 
@@ -45,8 +46,14 @@ def get_user(id):
     return UserResponse(user)
 
 
-# @api.route('/users/<int:id>', methods=['PATCH'])
-# @json_mimetype_required
-# @use_kwargs(UserCreateSchema,locations=('json',))
-# def update_user(id):
-#     pass
+@api.route('/users/<int:user_id>', methods=['PATCH'])
+@json_mimetype_required
+def update_user(user_id):
+    user = User.query.filter(
+        User.id == user_id
+    ).one_or_none()
+    if user is None:
+        UserNotFoundResponse()
+    update_instance(UserUpdateSchema, user)
+    db.session.commit()
+    return UserResponse(user)
