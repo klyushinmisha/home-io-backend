@@ -35,8 +35,7 @@ class Device(db.Model):
 
     registered_at = db.Column(
         ArrowType,
-        default=arrow.utcnow,
-        onupdate=arrow.utcnow
+        default=arrow.utcnow
     )
 
     device_type = db.Column(Enum(TypeEnum))
