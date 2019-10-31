@@ -26,7 +26,13 @@ __all__ = [
     'DeviceTasksReadSchema',
     'DeviceTaskCreateSchema',
     'DeviceTasksCreateSchema',
-    'DeviceTaskUpdateSchema'
+    'DeviceTaskUpdateSchema',
+
+    # script schemas
+    'ScriptReadSchema',
+    'ScriptsReadSchema',
+    'ScriptCreateSchema',
+    'ScriptUpdateSchema'
 ]
 
 
@@ -34,6 +40,7 @@ from .auth import LoginSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
 from .device_task import DeviceTaskSchema
+from .script import ScriptSchema
 from .user import UserSchema
 
 
@@ -84,5 +91,15 @@ DeviceTasksCreateSchema = DeviceTaskSchema(
 )
 DeviceTaskUpdateSchema = DeviceTaskSchema(
     exclude=('id', 'created_at'),
+    partial=True
+)
+
+ScriptReadSchema = ScriptSchema()
+ScriptsReadSchema = ScriptSchema(many=True)
+ScriptCreateSchema = ScriptSchema(
+    exclude=('id', 'created_at', 'calls', 'runtime')
+)
+ScriptUpdateSchema = ScriptSchema(
+    exclude=('id', 'created_at', 'calls', 'runtime'),
     partial=True
 )

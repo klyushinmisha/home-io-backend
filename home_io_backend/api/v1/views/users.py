@@ -33,7 +33,6 @@ def create_new_user(email, username, password):
     return UserResponse(user)
 
 
-
 @api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required
 def get_user(user_id):
