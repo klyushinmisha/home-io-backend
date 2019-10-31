@@ -89,7 +89,6 @@ class TestDeviceCreateSchema:
             DeviceCreateSchema.load(device_data)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'id' in e.messages
             assert 'registered_at' in e.messages
             assert 'owner_id' in e.messages
 
