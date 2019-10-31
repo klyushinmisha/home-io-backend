@@ -42,10 +42,10 @@ LoginSchema = LoginSchema()
 UserReadSchema = UserSchema()
 UsersReadSchema = UserSchema(many=True)
 UserCreateSchema = UserSchema(
-    exclude=('id', 'created_at', 'devices')
+    exclude=('id', 'created_at')
 )
 UserUpdateSchema = UserSchema(
-    exclude=('id', 'created_at', 'devices'),
+    exclude=('id', 'created_at'),
     partial=True
 )
 

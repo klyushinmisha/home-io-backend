@@ -34,9 +34,3 @@ class UserSchema(Schema):
     )
 
     created_at = ArrowField()
-
-    devices = fields.Nested(
-        'DeviceSchema',
-        exclude=('owner_id', ),
-        many=True
-    )
