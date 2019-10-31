@@ -1,9 +1,5 @@
 '''This module contains common JSON responses.'''
 
-import json
-
-from flask import Response
-
 __all__ = [
     'JsonApiResponse',
     'JsonApiErrorResponse',
@@ -13,7 +9,15 @@ __all__ = [
     'InvalidBodyResponse',
     'MethodNotAllowedResponse',
     'NotFoundResponse',
+    'PaginateResponse'
 ]
+
+import json
+
+from flask import Response
+from sqlalchemy import bindparam
+
+from ...models import db
 
 
 class JsonApiResponse(Response):
@@ -41,6 +45,34 @@ class JsonApiErrorResponse(Response):
             status,
             mimetype='application/json'
         )
+
+
+class PaginateResponse(JsonApiResponse):
+    def __init__(self, bq, schema, page=0, per_page=None, bq_params=None):
+        paging_params = {}
+        if per_page is not None:
+            bq += lambda q: q\
+                .limit(bindparam('page_size'))\
+                .offset(bindparam('page_offset'))
+
+            paging_params.update({
+                'page_size': per_page,
+                'page_offset': page * per_page
+            })
+
+        if bq_params is None:
+            bq_params = paging_params
+        else:
+            bq_params.update(paging_params)
+
+        query = bq(db.session()).params(bq_params).all()
+
+        response = {
+            'data': schema.dump(query),
+            'page': page,
+            'per_page': per_page
+        }
+        super().__init__(response, 200)
 
 
 class JsonMimetypeRequiredResponse(JsonApiErrorResponse):
