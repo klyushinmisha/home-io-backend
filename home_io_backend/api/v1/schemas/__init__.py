@@ -46,7 +46,7 @@ UserUpdateSchema = UserSchema(
 DeviceReadSchema = DeviceSchema()
 DevicesReadSchema = DeviceSchema(many=True)
 DeviceCreateSchema = DeviceSchema(
-    exclude=('id', 'registered_at', 'owner_id')
+    exclude=('id', 'registered_at', )
 )
 DeviceUpdateSchema = DeviceSchema(
     exclude=('id', 'registered_at', 'owner_id'),
