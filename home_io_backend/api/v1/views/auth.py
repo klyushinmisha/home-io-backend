@@ -3,20 +3,19 @@ __all__ = [
 ]
 
 from flask_jwt_extended import create_access_token
-from webargs.flaskparser import use_kwargs
 
+from . import parser
 from .. import api
 from ..responses.auth import LoginResponse
 from ..responses.user import *
 from ..schemas.auth import LoginSchema
 from ..view_decorators import json_mimetype_required
 from ....models import User
-from . import parser
 
 
 @api.route('/login', methods=['POST'])
 @json_mimetype_required
-@parser.use_kwargs(LoginSchema(), locations=('json',))
+@parser.use_kwargs(LoginSchema, locations=('json',))
 def login(username, password):
     user = User.query.filter(
         User.username == username

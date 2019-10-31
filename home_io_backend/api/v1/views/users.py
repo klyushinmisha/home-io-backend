@@ -1,12 +1,11 @@
 from flask_jwt_extended import jwt_required
-from webargs.flaskparser import use_kwargs
 
+from . import parser
 from .. import api
 from ..responses.user import *
 from ..schemas import UserCreateSchema
 from ..view_decorators import json_mimetype_required
 from ....models import User, db
-from . import parser
 
 
 @api.route('/users', methods=['POST'])
@@ -17,13 +16,13 @@ def create_new_user(email, username, password):
         User.username == username
     ).one_or_none()
     if user is not None:
-        return UsernameAlreadyExistResponse()
+        return UsernameAlreadyExistsResponse()
 
     user = User.query.filter(
         User.email == email
     ).one_or_none()
     if user is not None:
-        return EmailAlreadyExistResponse()
+        return EmailAlreadyExistsResponse()
 
     user = User(
         email=email,
@@ -35,11 +34,11 @@ def create_new_user(email, username, password):
     return UserResponse(user)
 
 
-@api.route('/users/<int:id>', methods=['GET'])
+@api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required
-def get_user(id):
+def get_user(user_id):
     user = User.query.filter(
-        User.id == id
+        User.id == user_id
     ).one_or_none()
     if user is None:
         UserNotFoundResponse()

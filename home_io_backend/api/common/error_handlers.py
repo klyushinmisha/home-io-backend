@@ -6,13 +6,16 @@ from marshmallow.exceptions import MarshmallowError
 from ..common.responses import *
 
 __all__ = [
+    'handle_bad_request',
     'handle_method_not_allowed',
     'handle_unprocessable_entity',
+    'handle_not_found',
+    'handle_validation_error'
 ]
 
 
 @current_app.errorhandler(400)
-def handle_unprocessable_entity(error):
+def handle_bad_request(error):
     return BadRequestResponse()
 
 

@@ -1,4 +1,7 @@
 __all__ = [
+    # auth schemas
+    'LoginSchema',
+
     # user schemas
     'UserReadSchema',
     'UsersReadSchema',
@@ -27,11 +30,14 @@ __all__ = [
 ]
 
 
+from .auth import LoginSchema
 from .device import DeviceSchema
 from .device_log import DeviceLogSchema
 from .device_task import DeviceTaskSchema
 from .user import UserSchema
 
+
+LoginSchema = LoginSchema()
 
 UserReadSchema = UserSchema()
 UsersReadSchema = UserSchema(many=True)
