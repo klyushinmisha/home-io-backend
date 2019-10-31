@@ -6,3 +6,4 @@ from ..error_handlers import *
 
 from .auth import *
 from .users import *
+from .scripts import *

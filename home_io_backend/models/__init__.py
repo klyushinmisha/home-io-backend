@@ -11,6 +11,7 @@ from .user import User
 from .device import Device, TypeEnum
 from .device_log import DeviceLog
 from .device_task import DeviceTask
+from .script import Script
 
 __all__ = [
     'db',
@@ -18,5 +19,6 @@ __all__ = [
     'Device',
     'DeviceLog',
     'DeviceTask',
+    'Script',
     'TypeEnum'
 ]
