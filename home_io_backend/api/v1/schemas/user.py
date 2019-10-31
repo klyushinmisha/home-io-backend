@@ -14,15 +14,14 @@ class UserSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=8, max=32),
-            validate.Regexp(r'[\w]+')
+            validate.Regexp(r'(^|,)[\w]+(,|$)', 0)
         ]
     )
 
     email = fields.Email(
         required=True,
         validate=[
-            validate.Length(min=8, max=64),
-            validate.Regexp(r'[\w@]+')
+            validate.Length(min=8, max=64)
         ]
     )
 
