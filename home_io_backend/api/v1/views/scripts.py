@@ -14,9 +14,9 @@ from sqlalchemy import bindparam
 from . import parser
 from .. import api
 from ..responses.script import *
-from ..schemas import ScriptUpdateSchema, ScriptsReadSchema
+from ..schemas import ScriptUpdateSchema, ScriptsReadSchema, ScriptCreateSchema
 from ..schemas.utils import update_instance
-from ..view_decorators import mimetype_required
+from ..view_decorators import json_mimetype_required
 from ...common.responses import PaginateResponse
 from ...common.schemas import PaginationSchema
 from ....models import db, Script
@@ -44,8 +44,9 @@ def get_scripts(page, per_page):
 
 @api.route('/scripts', methods=['POST'])
 @jwt_required
-@mimetype_required(('text/plain', ))
-def create_script():
+@json_mimetype_required
+@parser.use_kwargs(ScriptCreateSchema, locations=('json',))
+def create_script(name, tag, code):
     # TODO: celery task
     # TODO:
     #   - save script as file
