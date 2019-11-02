@@ -5,7 +5,7 @@ from marshmallow.exceptions import ValidationError
 
 from ...api.v1.schemas import DeviceReadSchema, DevicesReadSchema, \
     DeviceCreateSchema, DeviceUpdateSchema
-from ...models import Device, User, TypeEnum
+from ...models import Device, User
 
 
 @pytest.fixture(scope='function')
@@ -20,9 +20,8 @@ def device(app, db):
         db.session.flush()
 
         device = Device(
-            id=uuid.uuid4(),
+            uuid=uuid.uuid4(),
             name='testdevice',
-            device_type=TypeEnum.blinker,
             owner_id=user.id
         )
         db.session.add(device)
@@ -42,46 +41,42 @@ class TestDeviceReadSchema:
 
 class TestDeviceCreateSchema:
     @pytest.mark.parametrize(
-        'name, device_type',
-        (('tet', 'blinker'),
-         ('fdsfsd', 'tetrshhgfh'),
-         ('very_long_devname_very_long_devname_very_long', 'blinker'),
-         ('@@@@@#####----', 'blinker'),)
+        'name',
+        ('tet',
+         'very_long_devname_very_long_devname_very_long',
+         '@@@@@#####----')
     )
-    def test_invalid_device(self, name, device_type):
+    def test_invalid_device(self, name):
         device_data = {
-            'name': name,
-            'device_type': device_type,
+            'name': name
         }
         try:
             DeviceCreateSchema.load(device_data)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'name' or 'device_name' in e.messages
+            assert 'name' in e.messages
 
     @pytest.mark.parametrize(
-        'name, device_type',
-        (('test_device', 'blinker', ),)
+        'name',
+        ('test_device',)
     )
-    def test_valid_data(self, name, device_type):
+    def test_valid_data(self, name):
         device_data = {
             'name': name,
-            'device_type': device_type,
         }
         try:
             DeviceCreateSchema.load(device_data)
-        except ValidationError as e:
+        except ValidationError:
             assert False, 'Can`t be ValidationError'
 
     @pytest.mark.parametrize(
-        'id, name, device_type, owner_id, registered_at',
-        ((uuid.uuid4(), 'test_device', 'blinker', 1, 'ANYTIME'),)
+        'dev_uuid, name, owner_id, registered_at',
+        ((uuid.uuid4(), 'test_device', 1, 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, id, name, device_type, owner_id, registered_at):
+    def test_pass_not_allowed_keys(self, dev_uuid, name, owner_id, registered_at):
         device_data = {
-            'id': id,
+            'uuid': uuid,
             'name': name,
-            'device_type': device_type,
             'owner_id': owner_id,
             'registered_at': registered_at
         }
@@ -95,33 +90,32 @@ class TestDeviceCreateSchema:
 
 class TestDeviceUpdateSchema:
     @pytest.mark.parametrize(
-        'id, registered_at',
+        'dev_uuid, registered_at',
         ((uuid.uuid4(), 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, id, registered_at):
+    def test_pass_not_allowed_keys(self, dev_uuid, registered_at):
         device_data = {
-            'id': id,
+            'uuid': dev_uuid,
             'registered_at': registered_at
         }
         try:
             DeviceUpdateSchema.load(device_data)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'id' in e.messages
+            assert 'uuid' in e.messages
             assert 'registered_at' in e.messages
 
     @pytest.mark.parametrize(
-        'name, device_type',
-        (('test_device', 'blinker'),)
+        'name',
+        ('test_device',)
     )
-    def test_partial_update(self, name, device_type):
+    def test_partial_update(self, name):
         device_data = {
-            'name': name,
-            'device_type':device_type
+            'name': name
         }
         try:
             DeviceUpdateSchema.load(device_data)
-        except ValidationError as e:
+        except ValidationError:
             assert False, 'Can`t be ValidationError'
 
 
@@ -130,6 +124,6 @@ class TestDevicesReadSchema:
         with app.app_context():
             devices = Device.query.all()
             try:
-                res = DevicesReadSchema.dump(devices)
-            except ValidationError as e:
+                DevicesReadSchema.dump(devices)
+            except ValidationError:
                 assert False, 'Can`t be ValidationError'

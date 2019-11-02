@@ -1,15 +1,15 @@
-import uuid
+from uuid import uuid4
 
 import arrow
 import pytest
 from marshmallow.exceptions import ValidationError
 
 from ...api.v1.schemas import DeviceLogReadSchema, DeviceLogCreateSchema, DeviceLogUpdateSchema
-from ...models import DeviceLog, User, Device, TypeEnum
+from ...models import DeviceLog, User, Device
 
 
 @pytest.fixture(scope='function')
-def device_id(app, db):
+def device_uuid(app, db):
     with app.app_context():
         user = User(
             username='testuser',
@@ -20,14 +20,13 @@ def device_id(app, db):
         db.session.flush()
 
         device = Device(
-            id=uuid.uuid4(),
+            uuid=uuid4(),
             name='testdevice',
-            device_type=TypeEnum.blinker,
             owner_id=user.id
         )
         db.session.add(device)
         db.session.commit()
-        return device.id
+        return device.uuid
 
 
 @pytest.fixture(scope='function')
@@ -42,9 +41,8 @@ def device_log(app, db):
         db.session.flush()
 
         device = Device(
-            id=uuid.uuid4(),
+            uuid=uuid4(),
             name='testdevice',
-            device_type=TypeEnum.blinker,
             owner_id=user.id
         )
         db.session.add(device)
@@ -78,7 +76,7 @@ class TestDeviceLogCreateSchema:
     )
     def test_invalid_device_id(self, app, device_id, log):
         dev_log = {
-            'device_id': device_id,
+            'device_uuid': device_id,
             'log': log
         }
         try:
@@ -86,7 +84,7 @@ class TestDeviceLogCreateSchema:
                 DeviceLogCreateSchema.load(dev_log)
             assert False, 'Exception must occur'
         except ValidationError as e:
-            assert 'device_id' in e.messages
+            assert 'device_uuid' in e.messages
 
 
     @pytest.mark.parametrize(
@@ -97,7 +95,7 @@ class TestDeviceLogCreateSchema:
         dev_log = {
             'id': log_id,
             'created_at': created_at,
-            'device_id': device_id,
+            'device_uuid': device_id,
             'log': log,
         }
         try:
@@ -112,15 +110,15 @@ class TestDeviceLogCreateSchema:
         'log',
         ({'log': 'test'}, )
     )
-    def test_valid_data(self, app, device_id, log):
+    def test_valid_data(self, app, device_uuid, log):
         dev_log = {
-            'device_id': device_id,
+            'device_uuid': device_uuid,
             'log': log,
         }
         try:
             with app.app_context():
                 DeviceLogCreateSchema.load(dev_log)
-        except ValidationError as e:
+        except ValidationError:
             assert False, 'Can`t be ValidationError'
 
 
@@ -129,9 +127,9 @@ class TestDeviceUpdateSchema:
         'created_at',
         (arrow.now(), )
     )
-    def test_pass_not_allowed_keys(self, app, device_id, created_at):
+    def test_pass_not_allowed_keys(self, app, device_uuid, created_at):
         dev_log = {
-            'device_id': device_id,
+            'device_uuid': device_uuid,
             'created_at': created_at
         }
         try:

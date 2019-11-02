@@ -1,9 +1,9 @@
-import uuid
+from uuid import uuid4
 
 import pytest
 from sqlalchemy import bindparam
 
-from ...models import Device, User, TypeEnum, DeviceTask
+from ...models import Device, User, DeviceTask
 
 
 @pytest.fixture(scope='function')
@@ -18,16 +18,15 @@ def dev_task_id(app, db):
         db.session.flush()
 
         dev = Device(
-            id=uuid.uuid4(),
+            uuid=uuid4(),
             name='deviceD',
-            device_type=TypeEnum.blinker,
             owner_id=user.id
         )
         db.session.add(dev)
         db.session.flush()
 
         dev_task = DeviceTask(
-            device_id=dev.id,
+            device_uuid=dev.uuid,
             task={
                 'task': 'mainTask'
             }
@@ -37,29 +36,28 @@ def dev_task_id(app, db):
         return dev_task.id
 
 
-class TestDeviceTask():
-    def test_create(self,app, db):
+class TestDeviceTask:
+    def test_create(self, app, db):
         with app.app_context():
             user = User(
-                email = 'privet@gmail.com',
+                email='privet@gmail.com',
                 username='mainUser',
-                password = 'password'
+                password='password'
             )
             db.session.add(user)
             db.session.flush()
 
             dev = Device(
-                id=uuid.uuid4(),
-                name = 'deviceName',
-                device_type = TypeEnum.blinker,
-                owner_id= user.id
+                uuid=uuid4(),
+                name='deviceName',
+                owner_id=user.id
             )
             db.session.add(dev)
             db.session.flush()
 
             dev_task = DeviceTask(
-                device_id= dev.id,
-                task = {
+                device_uuid=dev.uuid,
+                task={
                     'task': 'mainTask'
                 }
             )

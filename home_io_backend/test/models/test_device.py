@@ -1,14 +1,14 @@
-import uuid
+from uuid import uuid4
 
 import pytest
 from sqlalchemy import bindparam
 
 from ...models import User
-from ...models.device import Device, TypeEnum
+from ...models.device import Device
 
 
 @pytest.fixture(scope='function')
-def device_id(app, db):
+def device_uuid(app, db):
     with app.app_context():
         u = User(
             username='testuser',
@@ -20,23 +20,21 @@ def device_id(app, db):
 
         # create device to read
         d = Device(
-            id=uuid.uuid4(),
+            uuid=uuid4(),
             name='testdevice',
-            device_type=TypeEnum.blinker,
             owner_id=u.id
         )
         u.devices.append(d)
         db.session.commit()
-        return d.id
+        return d.uuid
 
 
 class TestDevice:
     @pytest.mark.parametrize(
-        'name,device_type',
-        (('testdevice', TypeEnum.blinker),
-         ('device', TypeEnum.humidity_sensor))
+        'name',
+        ('testdevice', 'device')
     )
-    def test_create(self, app, db, name, device_type):
+    def test_create(self, app, db, name):
         with app.app_context():
             u = User(
                 username='testuser',
@@ -47,21 +45,20 @@ class TestDevice:
             db.session.flush()
 
             d = Device(
-                id=uuid.uuid4(),
+                uuid=uuid4(),
                 name=name,
-                device_type=device_type
             )
             u.devices.append(d)
             db.session.commit()
 
-    def test_read(self, app, db, device_id):
+    def test_read(self, app, db, device_uuid):
         with app.app_context():
             # try to read device
             bq = Device.baked_query + (lambda q: q
-                .filter(Device.id == bindparam('device_id'))
+                .filter(Device.uuid == bindparam('device_uuid'))
             )
             bq_params = {
-                'device_id': device_id
+                'device_uuid': device_uuid
             }
             d = (bq(db.session())
                 .params(bq_params)
@@ -69,17 +66,17 @@ class TestDevice:
             assert d is not None
 
     @pytest.mark.parametrize(
-        'name, device_type',
-        (('newname', TypeEnum.humidity_sensor),)
+        'name',
+        ('newname',)
     )
-    def test_update(self, app, db, name, device_type, device_id):
+    def test_update(self, app, db, name, device_uuid):
         with app.app_context():
             # read user
             bq = Device.baked_query + (lambda q: q
-                .filter(Device.id == bindparam('device_id'))
+                .filter(Device.uuid == bindparam('device_uuid'))
             )
             bq_params = {
-                'device_id': device_id
+                'device_uuid': device_uuid
             }
             d = (bq(app.db.session())
                 .params(bq_params)
@@ -87,18 +84,17 @@ class TestDevice:
 
             # update device data
             d.name = name
-            d.device_type = device_type
             db.session.add(d)
             db.session.commit()
 
-    def test_delete(self, app, db, device_id):
+    def test_delete(self, app, db, device_uuid):
         with app.app_context():
             # read device
             bq = Device.baked_query + (lambda q: q
-                .filter(Device.id == bindparam('device_id'))
+                .filter(Device.uuid == bindparam('device_uuid'))
             )
             bq_params = {
-                'device_id': device_id
+                'device_uuid': device_uuid
             }
             d = (bq(db.session())
                 .params(bq_params)
