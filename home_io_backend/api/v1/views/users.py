@@ -42,7 +42,7 @@ def get_user(id):
         User.id == id
     ).one_or_none()
     if user is None:
-        UserNotFoundResponse()
+        return UserNotFoundResponse()
     return UserResponse(user)
 
 
@@ -53,7 +53,7 @@ def update_user(user_id):
         User.id == user_id
     ).one_or_none()
     if user is None:
-        UserNotFoundResponse()
+        return UserNotFoundResponse()
     update_instance(UserUpdateSchema, user)
     db.session.commit()
     return UserResponse(user)
