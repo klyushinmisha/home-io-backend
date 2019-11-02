@@ -62,7 +62,7 @@ DeviceCreateSchema = DeviceSchema(
     exclude=('registered_at',)
 )
 DeviceUpdateSchema = DeviceSchema(
-    exclude=('id', 'registered_at', 'owner_id'),
+    exclude=('uuid', 'registered_at', 'owner_id'),
     partial=True
 )
 

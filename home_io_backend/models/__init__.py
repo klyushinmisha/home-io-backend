@@ -8,7 +8,7 @@ db.bakery = baked.bakery()
 bcrypt = Bcrypt()
 
 from .user import User
-from .device import Device, TypeEnum
+from .device import Device
 from .device_log import DeviceLog
 from .device_task import DeviceTask
 from .script import Script
@@ -19,6 +19,5 @@ __all__ = [
     'Device',
     'DeviceLog',
     'DeviceTask',
-    'Script',
-    'TypeEnum'
+    'Script'
 ]

@@ -3,6 +3,7 @@ from sqlalchemy_utils import ArrowType
 
 from . import db, bcrypt
 from .device import Device
+from .script import Script
 
 
 class User(db.Model):
@@ -37,6 +38,12 @@ class User(db.Model):
 
     devices = db.relationship(
         Device,
+        backref='user',
+        cascade='all, delete-orphan'
+    )
+
+    scripts = db.relationship(
+        Script,
         backref='user',
         cascade='all, delete-orphan'
     )

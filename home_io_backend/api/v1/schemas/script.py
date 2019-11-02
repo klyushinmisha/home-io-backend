@@ -15,7 +15,7 @@ class ScriptSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=4, max=64),
-            validate.Regexp(r'[\w]+')
+            validate.Regexp(r'(^|,)[\w]+(,|$)', 0)
         ]
     )
 
@@ -23,7 +23,7 @@ class ScriptSchema(Schema):
         required=True,
         validate=[
             validate.Length(min=4, max=64),
-            validate.Regexp(r'[\w]+')
+            validate.Regexp(r'(^|,)[\w]+(,|$)', 0)
         ]
     )
 

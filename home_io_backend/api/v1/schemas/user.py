@@ -1,6 +1,8 @@
 from marshmallow import fields, validate, Schema
 from marshmallow_arrow import ArrowField
 
+from .device import DeviceSchema
+from .script import ScriptSchema
 from ....models import User
 
 
@@ -34,3 +36,13 @@ class UserSchema(Schema):
     )
 
     created_at = ArrowField()
+
+    devices = fields.Nested(
+        DeviceSchema,
+        many=True
+    )
+
+    scripts = fields.Nested(
+        ScriptSchema,
+        many=True
+    )

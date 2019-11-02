@@ -1,18 +1,9 @@
-import enum
-
 import arrow
-from sqlalchemy import Enum
 from sqlalchemy_utils import ArrowType, UUIDType
 
 from . import db
 from .device_log import DeviceLog
 from .device_task import DeviceTask
-
-
-class TypeEnum(enum.Enum):
-    humidity_sensor = 0
-    blinker = 1
-    rangefinder = 2
 
 
 class Device(db.Model):
@@ -21,7 +12,7 @@ class Device(db.Model):
 
     baked_query = db.bakery(lambda session: session.query(Device))
 
-    id = db.Column(
+    uuid = db.Column(
         UUIDType(binary=True),
         nullable=False,
         primary_key=True,
@@ -37,8 +28,6 @@ class Device(db.Model):
         ArrowType,
         default=arrow.utcnow
     )
-
-    device_type = db.Column(Enum(TypeEnum))
 
     owner_id = db.Column(
         db.Integer,

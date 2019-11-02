@@ -14,7 +14,7 @@ class DeviceTaskSchema(Schema):
     )
     created_at = ArrowField()
 
-    device_id = fields.UUID(
+    device_uuid = fields.UUID(
         required=True,
         validate=[
             lambda dev_id: Device.query.get(dev_id) is not None

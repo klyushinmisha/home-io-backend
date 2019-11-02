@@ -1,5 +1,6 @@
-from webargs.flaskparser import use_kwargs
+from uuid import uuid4
 
+from . import parser
 from .. import api
 from ..responses.device import *
 from ..schemas import DeviceCreateSchema
@@ -9,17 +10,20 @@ from ....models import Device, db
 
 @api.route("/devices", methods=['POST'])
 @json_mimetype_required
-@use_kwargs(DeviceCreateSchema, locations=('json',))
-def create_new_device(device_id, name, device_type, owner_id):
+@parser.use_kwargs(DeviceCreateSchema, locations=('json',))
+def create_new_device(uuid, name, owner_id):
     device = Device.query.filter(
         Device.name == name
     ).one_or_none()
     if device is not None:
         return DeviceAlreadyExistResponse()
+
+    if uuid is None:
+        uuid = uuid4()
+
     device = Device(
-        id=device_id,
+        uuid=uuid,
         name=name,
-        device_type=device_type,
         owner_id=owner_id,
     )
     db.session.add(device)
