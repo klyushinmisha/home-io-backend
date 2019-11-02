@@ -5,6 +5,8 @@ __all__ = [
     'DeviceResponse',
     'DeviceNotFoundResponse',
     'DeviceAlreadyExistResponse',
+    'DeviceDeleteSuccessfullyResponse',
+    'DeviceUpdateSuccessfullyResponse',
 ]
 
 
@@ -22,3 +24,12 @@ class DeviceAlreadyExistResponse(JsonApiErrorResponse):
     def __init__(self):
         super().__init__('deviceAlreadyExist', 400)
 
+
+class DeviceDeleteSuccessfullyResponse(JsonApiErrorResponse):
+    def __init__(self, device):
+        super().__init__(DeviceReadSchema.dump(device), 200)
+
+
+class DeviceUpdateSuccessfullyResponse(JsonApiErrorResponse):
+    def __init__(self, device):
+        super().__init__(DeviceReadSchema.dump(device), 200)
