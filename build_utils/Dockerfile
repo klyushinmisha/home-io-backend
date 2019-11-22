@@ -1,4 +1,4 @@
-FROM python:alpine-3
+FROM python:3-alpine
 
 WORKDIR /opt/home_io_faas/
 
