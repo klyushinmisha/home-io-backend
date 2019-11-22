@@ -23,6 +23,7 @@ services:
       - BUILDS_POOL=/opt/home_io_backend/builds_pool
       - HOME_IO_SDK_PATH=/opt/home_io_backend/build_utils/home_io_sdk
       - DOCKERFILE_PATH=/opt/home_io_backend/build_utils/Dockerfile
+      - DOCKER_MACHINE_URI=${DOCKER_MACHINE_URI}
     volumes:
       - avatars:/opt/home_io_backend/avarars
       - scripts_path:/opt/home_io_backend/scripts_path
