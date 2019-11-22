@@ -5,12 +5,17 @@ from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from sqlalchemy_utils import database_exists, create_database
 
-from ..config import Config
+from .celery import make_celery
 
 # create app and configure it
 # NOTE: config file depends on build type (dev, test, prod)
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_object('home_io_backend.config.Config')
+
+# create celery client
+celery = make_celery(app)
+from .tasks.docker_tasks import build_container
+celery.task(queue='docker_tasks')(build_container)
 
 # register HTTP error handlers
 with app.app_context():

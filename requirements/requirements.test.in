@@ -16,3 +16,6 @@ marshmallow
 marshmallow-arrow
 marshmallow-enum
 webargs
+
+docker
+redis

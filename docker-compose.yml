@@ -8,7 +8,7 @@ services:
       context: .
       args:
         - CONFIG=config.py
-        - REQUIREMENTS=requirements.dev.txt
+        - REQUIREMENTS=requirements.txt
       dockerfile: ci/Dockerfile
     ports:
       - 8000:8000
@@ -16,8 +16,17 @@ services:
       - LC_ALL=C.UTF-8
       - LANG=C.UTF-8
       - MIGRATIONS_DIR=/opt/home_io_backend/home_io_backend/migrations
+      - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://postgres:postgres@home_io_backend_postgres/home_io_backend
+      - REDIS_BROKER_URL=redis://home_io_backend_redis:6379/0
+      - REDIS_BACKEND_URL=redis://home_io_backend_redis:6379/1
+      - SCRIPTS_PATH=/opt/home_io_backend/scripts_path
+      - BUILDS_POOL=/opt/home_io_backend/builds_pool
+      - HOME_IO_SDK_PATH=/opt/home_io_backend/build_utils/home_io_sdk
+      - DOCKERFILE_PATH=/opt/home_io_backend/build_utils/Dockerfile
     volumes:
       - avatars:/opt/home_io_backend/avarars
+      - scripts_path:/opt/home_io_backend/scripts_path
+      - builds_pool:/opt/home_io_backend/builds_pool
     depends_on:
       - postgres
     restart:
@@ -31,8 +40,18 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
+  redis:
+    image: redis:5
+    container_name: home_io_backend_redis
+    restart:
+      on-failure
+
 volumes:
   avatars:
+    driver: local
+  scripts_path:
+    driver: local
+  builds_pool:
     driver: local
   postgres:
     driver: local

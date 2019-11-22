@@ -27,11 +27,6 @@ class Script(db.Model):
         nullable=False
     )
 
-    src_path = db.Column(
-        db.String(4096),
-        nullable=False
-    )
-
     calls = db.Column(
         db.Integer,
         default=0

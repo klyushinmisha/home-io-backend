@@ -12,4 +12,4 @@ ARG CONFIG
 COPY run_app.sh .
 COPY env.py .
 COPY config/${CONFIG} ./config.py
-RUN touch __init__.py
+COPY build_utils ./build_utils
