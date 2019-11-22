@@ -17,8 +17,8 @@ services:
       - LANG=C.UTF-8
       - MIGRATIONS_DIR=/opt/home_io_backend/home_io_backend/migrations
       - SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://postgres:postgres@home_io_backend_postgres/home_io_backend
-      - REDIS_BROKER_URL=redis://home_io_backend_redis:6379/0
-      - REDIS_BACKEND_URL=redis://home_io_backend_redis:6379/1
+      - REDIS_BROKER_URI=redis://home_io_backend_redis:6379/0
+      - REDIS_BACKEND_URI=redis://home_io_backend_redis:6379/1
       - SCRIPTS_PATH=/opt/home_io_backend/scripts_path
       - BUILDS_POOL=/opt/home_io_backend/builds_pool
       - HOME_IO_SDK_PATH=/opt/home_io_backend/build_utils/home_io_sdk
