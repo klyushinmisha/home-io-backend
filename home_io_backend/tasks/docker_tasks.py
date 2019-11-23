@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 import docker
 
@@ -24,8 +25,11 @@ def build_container(name, tag, script_path):
         sha_id
     )
 
-    if not os.path.exists(build_path):
-        os.makedirs(build_path, exist_ok=True)
+    if os.path.exists(build_path):
+        shutil.rmtree(build_path)
+        # NOTE: wait some time for OS to remove tree
+        time.sleep(0.5)
+    os.makedirs(build_path, exist_ok=True)
 
     shutil.copyfile(
         script_path,
