@@ -15,10 +15,11 @@ class DeviceResponse(JsonApiResponse):
 
 class DeviceNotFoundResponse(JsonApiErrorResponse):
     def __init__(self):
-        super().__init__('deviceNotFound', 404)
+        super().__init__('DEVICE_NOT_FOUND', 404)
 
 
-class DeviceAlreadyExistResponse(JsonApiErrorResponse):
+class DeviceAlreadyExistsResponse(JsonApiErrorResponse):
     def __init__(self):
-        super().__init__('deviceAlreadyExist', 400)
+        super().__init__('DEVICE_ALREADY_EXISTS', 400)
+
 
