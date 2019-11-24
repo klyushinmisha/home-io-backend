@@ -31,7 +31,7 @@ def create_new_device(uuid, name, owner_id):
         Device.name == name
     ).one_or_none()
     if device is not None:
-        return DeviceAlreadyExistResponse()
+        return DeviceAlreadyExistsResponse()
 
     if uuid is None:
         uuid = uuid4()
