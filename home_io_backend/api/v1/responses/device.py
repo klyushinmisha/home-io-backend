@@ -4,7 +4,8 @@ from ...common.responses import JsonApiResponse, JsonApiErrorResponse
 __all__ = [
     'DeviceResponse',
     'DeviceNotFoundResponse',
-    'DeviceAlreadyExistResponse',
+    'DeviceAlreadyExistsResponse',
+    'DeviceAccessDeniedResponse'
 ]
 
 
@@ -23,3 +24,6 @@ class DeviceAlreadyExistsResponse(JsonApiErrorResponse):
         super().__init__('DEVICE_ALREADY_EXISTS', 400)
 
 
+class DeviceAccessDeniedResponse(JsonApiErrorResponse):
+    def __init__(self):
+        super().__init__('DEVICE_ACCESS_DENIED', 403)
