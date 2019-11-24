@@ -24,7 +24,7 @@ services:
       - HOME_IO_SDK_PATH=/opt/home_io_backend/build_utils/home_io_sdk
       - DOCKERFILE_PATH=/opt/home_io_backend/build_utils/Dockerfile
       - DOCKER_MACHINE_URI=${DOCKER_MACHINE_URI}
-      - BACKEND_API_URL=http://localhost:8000/api/v1
+      - BACKEND_API_URL=${BACKEND_API_URL}
     volumes:
       - avatars:/opt/home_io_backend/avarars
       - scripts_path:/opt/home_io_backend/scripts_path
