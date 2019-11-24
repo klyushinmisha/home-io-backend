@@ -40,7 +40,7 @@ def get_user(user_id):
         User.id == user_id
     ).one_or_none()
     if user is None:
-        UserNotFoundResponse()
+        return UserNotFoundResponse()
     return UserResponse(user)
 
 
