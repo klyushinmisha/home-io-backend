@@ -1,13 +1,35 @@
 from uuid import uuid4
 
 from flask_jwt_extended import jwt_required, current_user
+from sqlalchemy import bindparam
 
 from . import parser
 from .. import api
 from ..responses.device import *
-from ..schemas import DeviceCreateSchema
-from ..view_decorators import json_mimetype_required
+from ..schemas import DeviceCreateSchema, DevicesReadSchema
+from ..view_decorators import json_mimetype_required, PaginateResponse
+from ...common.schemas import PaginationSchema
 from ....models import Device, db
+
+
+@api.route('/devices', methods=['GET'])
+@jwt_required
+@parser.use_kwargs(PaginationSchema, locations=('query',))
+def get_devices(page, per_page):
+    bq = Device.baked_query + (
+        lambda q: q.filter(Device.owner_id == bindparam('owner_id'))
+    )
+    bq_params = {
+        'owner_id': current_user.id
+    }
+
+    return PaginateResponse(
+        bq,
+        DevicesReadSchema,
+        page,
+        per_page,
+        bq_params
+    )
 
 
 @api.route('/devices/<int:d_id>', methods=['GET'])
