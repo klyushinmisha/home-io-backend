@@ -4,6 +4,7 @@ __all__ = [
     'ScriptNotFoundResponse',
     'ScriptAccessDeniedResponse',
     'ScriptBuildStartedResponse',
+    'ScriptStartedResponse',
     'ScriptTagAlreadyExistsResponse'
 ]
 
@@ -22,6 +23,11 @@ class ScriptDeleteResponse(JsonApiResponse):
 
 
 class ScriptBuildStartedResponse(JsonApiResponse):
+    def __init__(self):
+        super().__init__('', 200)
+
+
+class ScriptStartedResponse(JsonApiResponse):
     def __init__(self):
         super().__init__('', 200)
 

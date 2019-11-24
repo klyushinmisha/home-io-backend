@@ -18,7 +18,7 @@ client = docker.DockerClient(base_url=DOCKER_MACHINE_URL)        # TODO: pass TC
 @celery.task
 def build_container(name, tag, script_path):
     # TODO: add versions
-    container_tag = f'{name}/{tag}:latest'
+    image_tag = f'{name}/{tag}:latest'
     sha_id = hash_build_name(name, tag)
     build_path = os.path.join(
         BUILDS_POOL,
@@ -54,7 +54,23 @@ def build_container(name, tag, script_path):
         )
     )
 
-    client.images.build(path=build_path, tag=container_tag)
+    client.images.build(path=build_path, tag=image_tag)
+
+
+@celery.task
+def run_image(name, tag, access_token):
+    image_tag = f'{name}/{tag}:latest'
+
+    client.containers.run(
+        image_tag,
+        auto_remove=True,
+        detach=True,
+        read_only=True,
+        environment={
+            'ACCESS_TOKEN': access_token,
+            'API_URL': os.environ.get('BACKEND_API_URL')
+        }
+    )
 
 
 @celery.task

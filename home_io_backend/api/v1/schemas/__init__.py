@@ -33,7 +33,8 @@ __all__ = [
     'ScriptsReadSchema',
     'ScriptCreateSchema',
     'ScriptUpdateSchema',
-    'ScriptBuildSchema'
+    'ScriptBuildSchema',
+    'ScriptRunSchema'
 ]
 
 
@@ -106,6 +107,16 @@ ScriptUpdateSchema = ScriptSchema(
 )
 # FIXME: include not working
 ScriptBuildSchema = ScriptSchema(
+    exclude=(
+        'id',
+        'calls',
+        'runtime',
+        'created_at',
+        'updated_at',
+        'owner_id'
+    )
+)
+ScriptRunSchema = ScriptSchema(
     exclude=(
         'id',
         'calls',

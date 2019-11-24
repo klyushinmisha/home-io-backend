@@ -1,3 +1,5 @@
+from home_io_backend.api.v1.responses.script import ScriptStartedResponse
+
 __all__ = [
     'get_scripts',
     'create_script',
@@ -6,19 +8,18 @@ __all__ = [
     'delete_script'
 ]
 
-import hashlib
 import os
 
 from flask import request, current_app
-from flask_jwt_extended import jwt_required, current_user
+from flask_jwt_extended import jwt_required, current_user, create_access_token
 from sqlalchemy import bindparam
 
-from home_io_backend.tasks.docker_tasks import build_container
+from home_io_backend.tasks.docker_tasks import build_container, run_image
 from . import parser
 from .. import api
 from ..responses.script import *
 from ..schemas import ScriptUpdateSchema, ScriptsReadSchema, \
-    ScriptCreateSchema, ScriptBuildSchema
+    ScriptCreateSchema, ScriptBuildSchema, ScriptRunSchema
 from ..schemas.utils import update_instance
 from ..view_decorators import json_mimetype_required
 from ...common.responses import PaginateResponse
@@ -106,6 +107,27 @@ def build_script(s_id):
 
     build_container.delay(name, tag, script_path)
     return ScriptBuildStartedResponse()
+
+
+@api.route('/scripts/<int:s_id>/run', methods=['POST'])
+@jwt_required
+def run_script(s_id):
+    script = Script.query.get(s_id)
+
+    if script is None:
+        return ScriptNotFoundResponse()
+    if script.owner_id != current_user.id:
+        return ScriptAccessDeniedResponse()
+
+    run_data = ScriptRunSchema.dump(script)
+    name = run_data['name']
+    tag = run_data['tag']
+    access_token = create_access_token(
+        identity=current_user.username
+    )
+
+    run_image.delay(name, tag, access_token)
+    return ScriptStartedResponse()
 
 
 @api.route('/scripts/<int:s_id>', methods=['GET'])
