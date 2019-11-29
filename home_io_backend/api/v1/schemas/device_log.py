@@ -16,7 +16,7 @@ class DeviceLogSchema(Schema):
 
     created_at = ArrowField()
 
-    device_uuid = fields.UUID(
+    device_id = fields.Integer(
         required=True,
         validate=[
             lambda dev_id: Device.query.get(dev_id) is not None

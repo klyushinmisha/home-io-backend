@@ -17,9 +17,9 @@ class DeviceTask(db.Model):
         unique=True
     )
 
-    device_uuid = db.Column(
+    device_id = db.Column(
         db.ForeignKey(
-            'device.uuid',
+            'device.id',
             ondelete='CASCADE'
         ),
         nullable=False

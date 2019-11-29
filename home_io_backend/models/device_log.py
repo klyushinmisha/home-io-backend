@@ -27,9 +27,9 @@ class DeviceLog(db.Model):
         index=True
     )
 
-    device_uuid = db.Column(
+    device_id = db.Column(
         db.ForeignKey(
-            'device.uuid',
+            'device.id',
             ondelete='CASCADE'
         ),
         nullable=False
