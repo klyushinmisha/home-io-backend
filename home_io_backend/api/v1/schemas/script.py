@@ -49,8 +49,3 @@ class ScriptSchema(Schema):
     created_at = ArrowField()
 
     updated_at = ArrowField()
-
-    owner_id = fields.Nested(
-        'UserSchema',
-        many=False
-    )

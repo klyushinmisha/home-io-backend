@@ -72,7 +72,7 @@ def get_device(d_id):
 @api.route("/devices", methods=['POST'])
 @json_mimetype_required
 @parser.use_kwargs(DeviceCreateSchema, locations=('json',))
-def create_new_device(uuid, name, owner_id):
+def create_new_device(uuid, name):
     device = Device.query.filter(
         Device.name == name
     ).one_or_none()
@@ -81,9 +81,8 @@ def create_new_device(uuid, name, owner_id):
 
     device = Device(
         uuid=uuid,
-        name=name,
-        owner_id=owner_id,
+        name=name
     )
-    db.session.add(device)
+    current_user.devices.append(device)
     db.session.commit()
     return DeviceResponse(device)

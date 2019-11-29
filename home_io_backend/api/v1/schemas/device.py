@@ -22,11 +22,6 @@ class DeviceSchema(Schema):
 
     registered_at = ArrowField()
 
-    owner_id = fields.Nested(
-        'UserSchema',
-        many=False
-    )
-
 
 class DeviceGetSchema(PaginationSchema):
     nearby = fields.Boolean(

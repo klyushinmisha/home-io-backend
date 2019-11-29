@@ -79,8 +79,7 @@ def create_script(name, tag, code):
         name=name,
         tag=tag
     )
-    user = User.query.get(current_user.id)
-    user.scripts.append(script)
+    current_user.scripts.append(script)
     db.session.commit()
     return ScriptResponse(script)
 

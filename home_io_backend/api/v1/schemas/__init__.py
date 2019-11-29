@@ -64,7 +64,7 @@ DeviceCreateSchema = DeviceSchema(
     exclude=('registered_at',)
 )
 DeviceUpdateSchema = DeviceSchema(
-    exclude=('uuid', 'registered_at', 'owner_id'),
+    exclude=('uuid', 'registered_at'),
     partial=True
 )
 
@@ -112,8 +112,7 @@ ScriptBuildSchema = ScriptSchema(
         'calls',
         'runtime',
         'created_at',
-        'updated_at',
-        'owner_id'
+        'updated_at'
     )
 )
 ScriptRunSchema = ScriptSchema(
@@ -122,7 +121,6 @@ ScriptRunSchema = ScriptSchema(
         'calls',
         'runtime',
         'created_at',
-        'updated_at',
-        'owner_id'
+        'updated_at'
     )
 )
