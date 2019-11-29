@@ -57,12 +57,13 @@ class TestDeviceCreateSchema:
             assert 'name' in e.messages
 
     @pytest.mark.parametrize(
-        'name',
-        ('test_device',)
+        'uuid, name',
+        (('6f20fa13-d4ff-4df0-bb32-a76ca725e6aa', 'test_device'), )
     )
-    def test_valid_data(self, name):
+    def test_valid_data(self, uuid, name):
         device_data = {
-            'name': name,
+            'uuid': uuid,
+            'name': name
         }
         try:
             DeviceCreateSchema.load(device_data)

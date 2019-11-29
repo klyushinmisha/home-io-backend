@@ -8,7 +8,7 @@ from ...models import Device, User, DeviceTask
 
 
 @pytest.fixture(scope='function')
-def device_uuid(app, db):
+def device_id(app, db):
     with app.app_context():
         user = User(
             username='testuser',
@@ -25,14 +25,14 @@ def device_uuid(app, db):
         )
         db.session.add(device)
         db.session.commit()
-        return device.uuid
+        return device.id
 
 
 @pytest.fixture(scope='function')
-def device_task(app, db, device_uuid):
+def device_task(app, db, device_id):
     with app.app_context():
         dev_task = DeviceTask(
-            device_uuid=device_uuid,
+            device_id=device_id,
             task={
                 'task': 'task1'
             }
@@ -79,10 +79,10 @@ class TestDeviceTaskCreateSchema:
         'task',
         ({'task': 'task'},)
     )
-    def test_valid_data(self, app, task, device_uuid):
+    def test_valid_data(self, app, task, device_id):
         try:
             with app.app_context():
-                task['device_uuid'] = device_uuid
+                task['device_id'] = device_id
                 DeviceTaskCreateSchema.load(task)
         except ValidationError:
             assert False, 'Can`t be ValidationError'
@@ -93,12 +93,12 @@ class TestDeviceTaskCreateSchema:
             (1, {'task': 'task'}, 'ANYTIME'),
         )
     )
-    def test_pass_not_allowed_keys(self, app, task_id, task, created_at, device_uuid):
+    def test_pass_not_allowed_keys(self, app, task_id, task, created_at, device_id):
         device_task_data = {
             'id': task_id,
             'task': task,
             'created_at': created_at,
-            'device_uuid': device_uuid,
+            'device_id': device_id,
         }
         try:
             with app.app_context():
@@ -114,11 +114,11 @@ class TestDeviceTaskUpdateSchema:
         'task_id, created_at',
         ((1, 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, app, task_id, created_at, device_uuid):
+    def test_pass_not_allowed_keys(self, app, task_id, created_at, device_id):
         device_task_data = {
             'id': task_id,
             'created_at': created_at,
-            'device_uuid': device_uuid
+            'device_id': device_id
         }
         try:
             with app.app_context():

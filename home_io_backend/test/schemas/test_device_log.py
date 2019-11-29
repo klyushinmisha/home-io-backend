@@ -9,27 +9,6 @@ from ...models import DeviceLog, User, Device
 
 
 @pytest.fixture(scope='function')
-def device_uuid(app, db):
-    with app.app_context():
-        user = User(
-            username='testuser',
-            email='testuser@mail.com',
-            password='TestPassword'
-        )
-        db.session.add(user)
-        db.session.flush()
-
-        device = Device(
-            uuid=uuid4(),
-            name='testdevice',
-            owner_id=user.id
-        )
-        db.session.add(device)
-        db.session.commit()
-        return device.uuid
-
-
-@pytest.fixture(scope='function')
 def device_log(app, db):
     with app.app_context():
         user = User(
@@ -69,33 +48,13 @@ class TestDeviceLogReadSchema:
 
 class TestDeviceLogCreateSchema:
     @pytest.mark.parametrize(
-        'device_id, log',
-        (('ffebed83-957b-49e4-ba70-b1b1f53004ad', {'log': 'test'}),
-         ('edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {'another_log': 'loglog'}),
-         ('febf8c05-6fc1-4834-8ee4-998420dd2d1a', {'access': 'success'}),)
+        'log_id, created_at, log',
+        ((1, arrow.now(), {'key': 'value'}), )
     )
-    def test_invalid_device_id(self, app, device_id, log):
-        dev_log = {
-            'device_uuid': device_id,
-            'log': log
-        }
-        try:
-            with app.app_context():
-                DeviceLogCreateSchema.load(dev_log)
-            assert False, 'Exception must occur'
-        except ValidationError as e:
-            assert 'device_uuid' in e.messages
-
-
-    @pytest.mark.parametrize(
-        'log_id, created_at, device_id, log',
-        ((1, arrow.now(), 'edec2e3c-30c7-475e-aa3b-44642cf7c5a0', {'key': 'value'}), )
-    )
-    def test_pass_not_allowed_keys(self, app, log_id, created_at, device_id, log):
+    def test_pass_not_allowed_keys(self, app, log_id, created_at, log):
         dev_log = {
             'id': log_id,
             'created_at': created_at,
-            'device_uuid': device_id,
             'log': log,
         }
         try:
@@ -107,13 +66,13 @@ class TestDeviceLogCreateSchema:
             assert 'created_at' in e.messages
 
     @pytest.mark.parametrize(
-        'log',
-        ({'log': 'test'}, )
+        'device_id, log',
+        ((1, {'log': 'test'}, ),)
     )
-    def test_valid_data(self, app, device_uuid, log):
+    def test_valid_data(self, app, device_id, log):
         dev_log = {
-            'device_uuid': device_uuid,
-            'log': log,
+            'device_id': device_id,
+            'log': log
         }
         try:
             with app.app_context():
@@ -127,9 +86,8 @@ class TestDeviceUpdateSchema:
         'created_at',
         (arrow.now(), )
     )
-    def test_pass_not_allowed_keys(self, app, device_uuid, created_at):
+    def test_pass_not_allowed_keys(self, app, created_at):
         dev_log = {
-            'device_uuid': device_uuid,
             'created_at': created_at
         }
         try:

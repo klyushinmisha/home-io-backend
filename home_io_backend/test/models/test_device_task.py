@@ -26,12 +26,11 @@ def dev_task_id(app, db):
         db.session.flush()
 
         dev_task = DeviceTask(
-            device_uuid=dev.uuid,
             task={
                 'task': 'mainTask'
             }
         )
-        db.session.add(dev_task)
+        dev.device_tasks.append(dev_task)
         db.session.commit()
         return dev_task.id
 
@@ -56,12 +55,11 @@ class TestDeviceTask:
             db.session.flush()
 
             dev_task = DeviceTask(
-                device_uuid=dev.uuid,
                 task={
                     'task': 'mainTask'
                 }
             )
-            db.session.add(dev_task)
+            dev.device_tasks.append(dev_task)
             db.session.commit()
 
     def test_read(self, app, db, dev_task_id):
