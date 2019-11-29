@@ -3,6 +3,7 @@ from ...common.responses import JsonApiResponse, JsonApiErrorResponse
 
 __all__ = [
     'DeviceResponse',
+    'DeviceConnectedResponse',
     'DeviceNotFoundResponse',
     'DeviceAlreadyExistsResponse',
     'DeviceAccessDeniedResponse'
@@ -12,6 +13,13 @@ __all__ = [
 class DeviceResponse(JsonApiResponse):
     def __init__(self, device):
         super().__init__(DeviceReadSchema.dump(device), 200)
+
+
+class DeviceConnectedResponse(JsonApiResponse):
+    def __init__(self, access_token):
+        super().__init__({
+            'access_token': access_token
+        }, 200)
 
 
 class DeviceNotFoundResponse(JsonApiErrorResponse):
