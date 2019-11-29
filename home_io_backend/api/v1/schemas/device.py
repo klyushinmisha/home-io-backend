@@ -1,6 +1,7 @@
-from marshmallow import fields, validate, Schema
+from marshmallow import fields, Schema, validate
 from marshmallow_arrow import ArrowField
 
+from ...common.schemas import PaginationSchema
 from ....models import Device
 
 
@@ -25,3 +26,20 @@ class DeviceSchema(Schema):
         'UserSchema',
         many=False
     )
+
+
+class DeviceGetSchema(PaginationSchema):
+    nearby = fields.Boolean(
+        missing=None
+    )
+
+    q = fields.String(
+        missing=None
+    )
+
+
+class ConnectSchema(Schema):
+    uuid = fields.UUID(
+        required=True
+    )
+

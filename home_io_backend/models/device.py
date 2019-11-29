@@ -21,7 +21,9 @@ class Device(db.Model):
 
     name = db.Column(
         db.String(128),
-        nullable=False
+    last_address = db.Column(
+        db.String(15),
+        index=True
     )
 
     registered_at = db.Column(
