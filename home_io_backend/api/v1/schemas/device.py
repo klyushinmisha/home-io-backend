@@ -9,7 +9,7 @@ class DeviceSchema(Schema):
     model = Device
 
     uuid = fields.UUID(
-        missing=None
+        required=True
     )
 
     name = fields.String(

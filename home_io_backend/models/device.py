@@ -12,15 +12,25 @@ class Device(db.Model):
 
     baked_query = db.bakery(lambda session: session.query(Device))
 
-    uuid = db.Column(
-        UUIDType(binary=True),
-        nullable=False,
+    id = db.Column(
+        db.Integer,
         primary_key=True,
+        autoincrement=True,
+        index=True
+    )
+
+    uuid = db.Column(
+        UUIDType(binary=False),
+        nullable=False,
         unique=True,
+        index=True
     )
 
     name = db.Column(
         db.String(128),
+        index=True
+    )
+
     last_address = db.Column(
         db.String(15),
         index=True
@@ -28,13 +38,13 @@ class Device(db.Model):
 
     registered_at = db.Column(
         ArrowType,
-        default=arrow.utcnow
+        default=arrow.utcnow,
+        index=True
     )
 
     owner_id = db.Column(
         db.Integer,
-        db.ForeignKey('user.id', ondelete='CASCADE'),
-        nullable=False
+        db.ForeignKey('user.id', ondelete='CASCADE')
     )
 
     device_logs = db.relationship(
