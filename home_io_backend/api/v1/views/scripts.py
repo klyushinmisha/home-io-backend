@@ -30,7 +30,7 @@ from ....models import db, Script, User
 
 @api.route('/scripts', methods=['GET'])
 @jwt_required
-@parser.use_kwargs(PaginationSchema, locations=('query',))
+@parser.use_kwargs(PaginationSchema(), locations=('query',))
 def get_scripts(page, per_page):
     bq = Script.baked_query + (
         lambda q: q.filter(Script.owner_id == bindparam('owner_id'))
@@ -107,27 +107,6 @@ def build_script(s_id):
 
     build_container.delay(name, tag, script_path)
     return ScriptBuildStartedResponse()
-
-
-@api.route('/scripts/<int:s_id>/run', methods=['POST'])
-@jwt_required
-def run_script(s_id):
-    script = Script.query.get(s_id)
-
-    if script is None:
-        return ScriptNotFoundResponse()
-    if script.owner_id != current_user.id:
-        return ScriptAccessDeniedResponse()
-
-    run_data = ScriptRunSchema.dump(script)
-    name = run_data['name']
-    tag = run_data['tag']
-    access_token = create_access_token(
-        identity=current_user.username
-    )
-
-    run_image.delay(name, tag, access_token)
-    return ScriptStartedResponse()
 
 
 @api.route('/scripts/<int:s_id>', methods=['GET'])

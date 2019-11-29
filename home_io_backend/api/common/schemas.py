@@ -14,11 +14,8 @@ class PaginationSchema(Schema):
     )
 
     per_page = fields.Integer(
-        missing=None,
+        missing=10,
         validate=[
             validate.Range(min=0)
         ]
     )
-
-
-PaginationSchema = PaginationSchema()
