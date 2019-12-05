@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from sqlalchemy_utils import database_exists, create_database
@@ -23,6 +24,9 @@ with app.app_context():
 
 # setup token manager
 jwt = JWTManager(app)
+
+# setup cors
+CORS(app)
 
 # import api dependencies
 from .api.v1 import api
