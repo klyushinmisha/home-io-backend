@@ -38,3 +38,5 @@ class ConnectSchema(Schema):
         required=True
     )
 
+    password = fields.String()
+

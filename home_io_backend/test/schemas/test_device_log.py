@@ -22,7 +22,7 @@ def device_log(app, db):
         device = Device(
             uuid=uuid4(),
             name='testdevice',
-            owner_id=user.id
+            user_id=user.id
         )
         db.session.add(device)
         db.session.flush()

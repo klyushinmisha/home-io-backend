@@ -1,5 +1,3 @@
-from home_io_backend.api.v1.responses.script import ScriptStartedResponse
-
 __all__ = [
     'get_scripts',
     'create_script',
@@ -11,21 +9,21 @@ __all__ = [
 import os
 
 from flask import request, current_app
-from flask_jwt_extended import jwt_required, current_user, create_access_token
+from flask_jwt_extended import jwt_required, current_user
 from sqlalchemy import bindparam
 
-from home_io_backend.tasks.docker_tasks import build_container, run_image
+from home_io_backend.tasks.docker_tasks import build_container
 from . import parser
 from .. import api
 from ..responses.script import *
 from ..schemas import ScriptUpdateSchema, ScriptsReadSchema, \
-    ScriptCreateSchema, ScriptBuildSchema, ScriptRunSchema
+    ScriptCreateSchema, ScriptBuildSchema
 from ..schemas.utils import update_instance
 from ..view_decorators import json_mimetype_required
 from ...common.responses import PaginateResponse
 from ...common.schemas import PaginationSchema
 from ....hash_utils import hash_build_name
-from ....models import db, Script, User
+from ....models import db, Script
 
 
 @api.route('/scripts', methods=['GET'])
@@ -33,10 +31,10 @@ from ....models import db, Script, User
 @parser.use_kwargs(PaginationSchema(), locations=('query',))
 def get_scripts(page, per_page):
     bq = Script.baked_query + (
-        lambda q: q.filter(Script.owner_id == bindparam('owner_id'))
+        lambda q: q.filter(Script.user_id == bindparam('user_id'))
     )
     bq_params = {
-        'owner_id': current_user.id
+        'user_id': current_user.id
     }
 
     return PaginateResponse(
@@ -91,7 +89,7 @@ def build_script(s_id):
 
     if script is None:
         return ScriptNotFoundResponse()
-    if script.owner_id != current_user.id:
+    if script.user_id != current_user.id:
         return ScriptAccessDeniedResponse()
 
     build_data = ScriptBuildSchema.dump(script)
@@ -114,7 +112,7 @@ def get_script(s_id):
     script = Script.query.get(s_id)
     if script is None:
         return ScriptNotFoundResponse()
-    if script.owner_id != current_user.id:
+    if script.user_id != current_user.id:
         return ScriptAccessDeniedResponse()
     return ScriptResponse(script)
 
@@ -123,7 +121,7 @@ def get_script(s_id):
 @jwt_required
 def update_script(s_id):
     script = Script.query.get(s_id)
-    if script.owner_id != current_user.id:
+    if script.user_id != current_user.id:
         return ScriptAccessDeniedResponse()
     update_instance(ScriptUpdateSchema, script, request.json)
     db.session.commit()
@@ -134,7 +132,7 @@ def update_script(s_id):
 @jwt_required
 def delete_script(s_id):
     script = Script.query.get(s_id)
-    if script.owner_id != current_user.id:
+    if script.user_id != current_user.id:
         return ScriptAccessDeniedResponse()
     db.session.remove(script)
     db.session.commit()

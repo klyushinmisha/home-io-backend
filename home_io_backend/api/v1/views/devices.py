@@ -7,10 +7,11 @@ from sqlalchemy import or_, cast
 from . import parser
 from .. import api
 from ..responses.device import *
-from ..schemas import DeviceCreateSchema, DevicesReadSchema
-from ..schemas.device import DeviceGetSchema, ConnectSchema
+from ..schemas import DeviceCreateSchema, DevicesReadSchema, DeviceLogsCreateSchema, ScriptRunSchema
+from ..schemas.device import DeviceGetSchema
 from ..view_decorators import json_mimetype_required, PaginateResponse
-from ....models import Device, db
+from ....models import Device, db, Script
+from ....tasks.docker_tasks import run_image
 
 
 @api.route('/devices', methods=['GET'])
@@ -18,10 +19,10 @@ from ....models import Device, db
 @parser.use_kwargs(DeviceGetSchema(), locations=('query',))
 def get_devices(q, nearby, page, per_page):
     bq = Device.baked_query + (
-        lambda query: query.filter(Device.owner_id == bindparam('owner_id'))
+        lambda query: query.filter(Device.user_id == bindparam('user_id'))
     )
     bq_params = {
-        'owner_id': current_user.id
+        'user_id': current_user.id
     }
 
     if q is not None:
@@ -64,12 +65,13 @@ def get_device(d_id):
     ).one_or_none()
     if dev is None:
         return DeviceNotFoundResponse()
-    elif dev.owner_id != current_user.id:
+    elif dev.user_id != current_user.id:
         return DeviceAccessDeniedResponse()
     return DeviceResponse(dev)
 
 
 @api.route("/devices", methods=['POST'])
+@jwt_required
 @json_mimetype_required
 @parser.use_kwargs(DeviceCreateSchema, locations=('json',))
 def create_new_device(uuid, name):
@@ -81,8 +83,70 @@ def create_new_device(uuid, name):
 
     device = Device(
         uuid=uuid,
-        name=name
+        name=name,
+        user_id=current_user.id
     )
-    current_user.devices.append(device)
     db.session.commit()
     return DeviceResponse(device)
+
+
+@api.route('/devices/<uuid:dev_uuid>/logs', methods=['POST'])
+@jwt_required
+def post_log(dev_uuid):
+    device = Device.query \
+        .filter(
+            Device.uuid == dev_uuid,
+            Device.user_id == current_user.id
+        ) \
+        .one_or_none()
+    if device is None:
+        return DeviceNotFoundResponse()
+    if request.remote_addr != device.last_address:
+        raise Exception('HACKED!!!')
+
+    logs = DeviceLogsCreateSchema.load(request.json)
+
+    # TODO: order by created_at
+    for log in logs:
+        db.session.add(log)
+    db.session.commit()
+
+    access_token = create_access_token(
+        identity=current_user.username
+    )
+    # TODO: add load balancing
+    tags = set(map(lambda l: l.tag, logs))
+    for tag in tags:
+        script = Script.query \
+            .filter(Script.tag == tag) \
+            .one_or_none()
+        if script is None:
+            # TODO: add error report for all failed starts
+            pass
+        else:
+            run_data = ScriptRunSchema.dump(script)
+            name = run_data['name']
+            tag = run_data['tag']
+
+            run_image.delay(name, tag, access_token)
+    return DeviceScriptsStartedResponse()
+
+
+@api.route('/devices/<uuid:dev_uuid>/tasks', methods=['GET'])
+@json_mimetype_required
+def get_tasks(dev_uuid):
+    device = Device.query \
+        .filter(
+            Device.uuid == dev_uuid,
+            Device.user_id == current_user.id
+        ).one_or_none()
+    if device is None:
+        return DeviceNotFoundResponse()
+    if request.remote_addr != device.last_address:
+        raise Exception('HACKED!!!')
+
+    resp = DeviceTasksResponse(device.device_tasks)
+    device.device_tasks.delete()
+    db.session.commit()
+
+    return resp

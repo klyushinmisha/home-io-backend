@@ -42,10 +42,3 @@ def get_user(user_id):
     if user is None:
         return UserNotFoundResponse()
     return UserResponse(user)
-
-
-# @api.route('/users/<int:id>', methods=['PATCH'])
-# @json_mimetype_required
-# @use_kwargs(UserCreateSchema,locations=('json',))
-# def update_user(id):
-#     pass

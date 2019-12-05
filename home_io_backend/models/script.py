@@ -47,7 +47,7 @@ class Script(db.Model):
         default=arrow.utcnow
     )
 
-    owner_id = db.Column(
+    user_id = db.Column(
         db.Integer,
         db.ForeignKey('user.id', ondelete='CASCADE'),
         nullable=False

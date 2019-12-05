@@ -1,4 +1,4 @@
-from ..schemas import DeviceReadSchema
+from ..schemas import DeviceReadSchema, DeviceTasksReadSchema
 from ...common.responses import JsonApiResponse, JsonApiErrorResponse
 
 __all__ = [
@@ -6,13 +6,25 @@ __all__ = [
     'DeviceConnectedResponse',
     'DeviceNotFoundResponse',
     'DeviceAlreadyExistsResponse',
-    'DeviceAccessDeniedResponse'
+    'DeviceAccessDeniedResponse',
+    'DeviceTasksResponse',
+    'DeviceScriptsStartedResponse'
 ]
 
 
 class DeviceResponse(JsonApiResponse):
     def __init__(self, device):
         super().__init__(DeviceReadSchema.dump(device), 200)
+
+
+class DeviceScriptsStartedResponse(JsonApiResponse):
+    def __init__(self):
+        super().__init__('DEVICE_SCRIPTS_STARTED', 200)
+
+
+class DeviceTasksResponse(JsonApiResponse):
+    def __init__(self, tasks):
+        super().__init__(DeviceTasksReadSchema.dump(tasks), 200)
 
 
 class DeviceConnectedResponse(JsonApiResponse):

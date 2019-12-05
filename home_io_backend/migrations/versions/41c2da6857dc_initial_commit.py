@@ -1,15 +1,15 @@
-"""initial migration
+"""initial commit
 
-Revision ID: 20e17dd9cd1f
+Revision ID: 41c2da6857dc
 Revises: 
-Create Date: 2019-11-28 23:01:39.939407
+Create Date: 2019-12-04 18:14:43.858872
 
 """
 import sqlalchemy as sa
 from alembic import op
 from sqlalchemy_utils import ArrowType, UUIDType, JSONType
 
-revision = '20e17dd9cd1f'
+revision = '41c2da6857dc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,12 +27,12 @@ def upgrade():
     op.create_index(op.f('ix_user_id'), 'user', ['id'], unique=False)
     op.create_table('device',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('uuid', UUIDType(binary=False), nullable=False),
+    sa.Column('uuid', UUIDType(), nullable=False),
     sa.Column('name', sa.String(length=128), nullable=True),
     sa.Column('last_address', sa.String(length=15), nullable=True),
     sa.Column('registered_at', ArrowType(), nullable=True),
-    sa.Column('owner_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ondelete='CASCADE'),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_device_id'), 'device', ['id'], unique=False)
@@ -48,8 +48,8 @@ def upgrade():
     sa.Column('runtime', sa.Integer(), nullable=True),
     sa.Column('created_at', ArrowType(), nullable=True),
     sa.Column('updated_at', ArrowType(), nullable=True),
-    sa.Column('owner_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ondelete='CASCADE'),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_script_id'), 'script', ['id'], unique=False)
@@ -57,18 +57,18 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('log', JSONType(), nullable=False),
     sa.Column('created_at', ArrowType(), nullable=True),
-    sa.Column('device_uuid', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['device_uuid'], ['device.id'], ondelete='CASCADE'),
+    sa.Column('device_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['device_id'], ['device.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id')
     )
     op.create_index(op.f('ix_device_log_created_at'), 'device_log', ['created_at'], unique=False)
     op.create_table('device_task',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('device_uuid', sa.Integer(), nullable=False),
+    sa.Column('device_id', sa.Integer(), nullable=False),
     sa.Column('task', JSONType(), nullable=False),
     sa.Column('created_at', ArrowType(), nullable=True),
-    sa.ForeignKeyConstraint(['device_uuid'], ['device.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['device_id'], ['device.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('id')
     )

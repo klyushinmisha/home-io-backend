@@ -22,7 +22,7 @@ def device_uuid(app, db):
         d = Device(
             uuid=uuid4(),
             name='testdevice',
-            owner_id=u.id
+            user_id=u.id
         )
         u.devices.append(d)
         db.session.commit()

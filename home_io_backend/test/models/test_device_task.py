@@ -20,7 +20,7 @@ def dev_task_id(app, db):
         dev = Device(
             uuid=uuid4(),
             name='deviceD',
-            owner_id=user.id
+            user_id=user.id
         )
         db.session.add(dev)
         db.session.flush()
@@ -49,7 +49,7 @@ class TestDeviceTask:
             dev = Device(
                 uuid=uuid4(),
                 name='deviceName',
-                owner_id=user.id
+                user_id=user.id
             )
             db.session.add(dev)
             db.session.flush()

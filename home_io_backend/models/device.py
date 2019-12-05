@@ -42,9 +42,12 @@ class Device(db.Model):
         index=True
     )
 
-    owner_id = db.Column(
-        db.Integer,
-        db.ForeignKey('user.id', ondelete='CASCADE')
+    user_id = db.Column(
+        db.ForeignKey(
+            'user.id',
+            ondelete='CASCADE'
+        ),
+        nullable=True
     )
 
     device_logs = db.relationship(

@@ -22,7 +22,7 @@ def device(app, db):
         device = Device(
             uuid=uuid.uuid4(),
             name='testdevice',
-            owner_id=user.id
+            user_id=user.id
         )
         db.session.add(device)
         db.session.commit()
@@ -71,14 +71,14 @@ class TestDeviceCreateSchema:
             assert False, 'Can`t be ValidationError'
 
     @pytest.mark.parametrize(
-        'dev_uuid, name, owner_id, registered_at',
+        'dev_uuid, name, user_id, registered_at',
         ((uuid.uuid4(), 'test_device', 1, 'ANYTIME'),)
     )
-    def test_pass_not_allowed_keys(self, dev_uuid, name, owner_id, registered_at):
+    def test_pass_not_allowed_keys(self, dev_uuid, name, user_id, registered_at):
         device_data = {
             'uuid': uuid,
             'name': name,
-            'owner_id': owner_id,
+            'user_id': user_id,
             'registered_at': registered_at
         }
         try:
@@ -86,7 +86,7 @@ class TestDeviceCreateSchema:
             assert False, 'Exception must occur'
         except ValidationError as e:
             assert 'registered_at' in e.messages
-            assert 'owner_id' in e.messages
+            assert 'user_id' in e.messages
 
 
 class TestDeviceUpdateSchema:
