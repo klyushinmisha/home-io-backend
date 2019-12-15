@@ -189,7 +189,10 @@ def get_tasks(dev_uuid):
         return DeviceNotFoundResponse()
 
     resp = DeviceTasksResponse(device.device_tasks)
-    device.device_tasks.delete()
+    device_tasks = DeviceTask.query.filter(
+        DeviceTask.device_id == device.id
+    )
+    device_tasks.delete()
     db.session.commit()
 
     return resp
