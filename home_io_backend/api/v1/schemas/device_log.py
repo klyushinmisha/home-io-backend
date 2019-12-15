@@ -1,7 +1,7 @@
 from marshmallow import fields, Schema
 from marshmallow_arrow import ArrowField
 
-from ....models import Device, DeviceLog
+from ....models import DeviceLog
 
 
 class DeviceLogSchema(Schema):
@@ -14,11 +14,13 @@ class DeviceLogSchema(Schema):
         required=True
     )
 
+    tag = fields.String(
+        required=True
+    )
+
     created_at = ArrowField()
 
-    device_id = fields.Integer(
-        required=True,
-        validate=[
-            lambda dev_id: Device.query.get(dev_id) is not None
-        ]
+    # FIXME: remove
+    device_id = fields.UUID(
+        required=False
     )

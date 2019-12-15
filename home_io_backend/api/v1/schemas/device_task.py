@@ -1,7 +1,7 @@
 from marshmallow import fields, Schema
 from marshmallow_arrow import ArrowField
 
-from ....models import DeviceTask, Device
+from ....models import DeviceTask
 
 
 class DeviceTaskSchema(Schema):
@@ -14,9 +14,7 @@ class DeviceTaskSchema(Schema):
     )
     created_at = ArrowField()
 
-    device_id = fields.Integer(
-        required=True,
-        validate=[
-            lambda dev_id: Device.query.get(dev_id) is not None
-        ]
+    # FIXME: remove
+    device_id = fields.UUID(
+        required=False
     )

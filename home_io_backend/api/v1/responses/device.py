@@ -8,7 +8,9 @@ __all__ = [
     'DeviceAlreadyExistsResponse',
     'DeviceAccessDeniedResponse',
     'DeviceTasksResponse',
-    'DeviceScriptsStartedResponse'
+    'DeviceScriptsStartedResponse',
+    'DeviceLogsResponse',
+    'DeviceTaskCreatedResponse'
 ]
 
 
@@ -32,6 +34,18 @@ class DeviceConnectedResponse(JsonApiResponse):
         super().__init__({
             'access_token': access_token
         }, 200)
+
+
+class DeviceLogsResponse(JsonApiResponse):
+    def __init__(self, logs):
+        super().__init__({
+            'logs': logs
+        }, 200)
+
+
+class DeviceTaskCreatedResponse(JsonApiResponse):
+    def __init__(self):
+        super().__init__('TASK_CREATED_RESPONSE', 200)
 
 
 class DeviceNotFoundResponse(JsonApiErrorResponse):
