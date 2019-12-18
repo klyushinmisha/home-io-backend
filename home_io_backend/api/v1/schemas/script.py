@@ -42,6 +42,8 @@ class ScriptSchema(Schema):
         ]
     )
 
+    enabled = fields.Boolean()
+
     calls = fields.Integer()
 
     runtime = fields.Integer()

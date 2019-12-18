@@ -31,7 +31,7 @@ class ScriptBuildStartedResponse(JsonApiResponse):
 
 
 class ScriptEnableSwitchedResponse(JsonApiResponse):
-    def __init__(self, enabled):
+    def __init__(self):
         super().__init__('SCRIPT_ENABLE_SWITCHED', 200)
 
 
