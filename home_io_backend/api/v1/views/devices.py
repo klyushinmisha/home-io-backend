@@ -130,17 +130,14 @@ def post_log(dev_uuid):
             # TODO: add error report for all failed starts
             pass
         elif script.enabled:
-            db.session.commit()
             run_data = ScriptRunSchema.dump(script)
             name = run_data['name']
             tag = run_data['tag']
 
-            start_time = arrow.utcnow().timestamp
+            # TODO: add runtime calculation
             run_image.delay(name, tag, access_token)
-            end_time = arrow.utcnow().timestamp
 
-            script.calls += 1
-            script.runtime += end_time - start_time
+            script.calls = script.calls + 1
             db.session.commit()
     return DeviceScriptsStartedResponse()
 

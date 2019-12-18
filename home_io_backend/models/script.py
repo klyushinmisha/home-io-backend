@@ -38,7 +38,7 @@ class Script(db.Model):
     )
 
     runtime = db.Column(
-        db.Integer,
+        db.Float,
         default=0
     )
 
