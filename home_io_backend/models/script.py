@@ -27,6 +27,11 @@ class Script(db.Model):
         nullable=False
     )
 
+    enabled = db.Column(
+        db.Boolean,
+        default=True
+    )
+
     calls = db.Column(
         db.Integer,
         default=0

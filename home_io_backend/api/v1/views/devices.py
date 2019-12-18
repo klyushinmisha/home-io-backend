@@ -1,3 +1,4 @@
+import arrow
 import sqlalchemy as sa
 from flask import request
 from flask_jwt_extended import jwt_required, current_user, create_access_token
@@ -128,12 +129,19 @@ def post_log(dev_uuid):
         if script is None:
             # TODO: add error report for all failed starts
             pass
-        else:
+        elif script.enabled:
+            db.session.commit()
             run_data = ScriptRunSchema.dump(script)
             name = run_data['name']
             tag = run_data['tag']
 
+            start_time = arrow.utcnow().timestamp
             run_image.delay(name, tag, access_token)
+            end_time = arrow.utcnow().timestamp
+
+            script.calls += 1
+            script.runtime += end_time - start_time
+            db.session.commit()
     return DeviceScriptsStartedResponse()
 
 

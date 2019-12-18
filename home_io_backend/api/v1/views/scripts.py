@@ -107,6 +107,21 @@ def build_script(s_id):
     return ScriptBuildStartedResponse()
 
 
+@api.route('/scripts/<int:s_id>/switch_enabled', methods=['POST'])
+@jwt_required
+def enable_script(s_id):
+    script = Script.query.get(s_id)
+
+    if script is None:
+        return ScriptNotFoundResponse()
+    if script.user_id != current_user.id:
+        return ScriptAccessDeniedResponse()
+
+    script.enabled = not script.enabled
+    db.session.commit()
+    return ScriptEnableSwitchedResponse()
+
+
 @api.route('/scripts/<int:s_id>', methods=['GET'])
 @jwt_required
 def get_script(s_id):
@@ -115,7 +130,18 @@ def get_script(s_id):
         return ScriptNotFoundResponse()
     if script.user_id != current_user.id:
         return ScriptAccessDeniedResponse()
-    return ScriptResponse(script)
+    folder_name = hash_build_name(
+        script.name,
+        script.tag
+    )
+    script_folder_path = os.path.join(
+        current_app.config['SCRIPTS_PATH'],
+        folder_name
+    )
+    script_path = os.path.join(script_folder_path, 'script.py')
+    with open(script_path, 'r') as s:
+        code = s.read()
+    return ScriptResponse(script, code)
 
 
 @api.route('/scripts/<int:s_id>', methods=['PATCH'])

@@ -97,6 +97,7 @@ DeviceTaskUpdateSchema = DeviceTaskSchema(
 )
 
 ScriptReadSchema = ScriptSchema()
+ScriptFullReadSchema = ScriptSchema()
 ScriptsReadSchema = ScriptSchema(many=True)
 ScriptCreateSchema = ScriptSchema(
     exclude=('id', 'created_at', 'calls', 'runtime')

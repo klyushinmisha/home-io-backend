@@ -4,7 +4,8 @@ __all__ = [
     'ScriptNotFoundResponse',
     'ScriptAccessDeniedResponse',
     'ScriptBuildStartedResponse',
-    'ScriptTagAlreadyExistsResponse'
+    'ScriptTagAlreadyExistsResponse',
+    'ScriptEnableSwitchedResponse'
 ]
 
 from ..schemas import ScriptReadSchema
@@ -12,18 +13,26 @@ from ...common.responses import JsonApiResponse, JsonApiErrorResponse
 
 
 class ScriptResponse(JsonApiResponse):
-    def __init__(self, script):
-        super().__init__(ScriptReadSchema.dump(script), 200)
+    def __init__(self, script, code=None):
+        data = ScriptReadSchema.dump(script)
+        if code is not None:
+            data['code'] = code
+        super().__init__(data, 200)
 
 
 class ScriptDeleteResponse(JsonApiResponse):
     def __init__(self):
-        super().__init__('', 200)
+        super().__init__('SCRIPT_DELETED', 200)
 
 
 class ScriptBuildStartedResponse(JsonApiResponse):
     def __init__(self):
-        super().__init__('', 200)
+        super().__init__('SCRIPT_BUILD_STARTED', 200)
+
+
+class ScriptEnableSwitchedResponse(JsonApiResponse):
+    def __init__(self, enabled):
+        super().__init__('SCRIPT_ENABLE_SWITCHED', 200)
 
 
 class ScriptAccessDeniedResponse(JsonApiErrorResponse):
