@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM klyushinmisha/home_io_bootstrap
 
 WORKDIR /opt/home_io_backend
 
@@ -8,4 +8,8 @@ COPY ${REQUIREMENTS} .
 RUN pip3 install -r ${REQUIREMENTS}
 
 # copy files
+ARG CONFIG
+COPY run_app.sh .
 COPY env.py .
+COPY config/${CONFIG} ./config.py
+COPY build_utils ./build_utils

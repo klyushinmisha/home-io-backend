@@ -2,11 +2,19 @@ flask
 celery
 
 sqlalchemy
+psycopg2-binary
 SQLAlchemy-Utils
 Flask-SQLAlchemy
 Flask-Migrate
 
-marshmallow
-Flask-CORS
 arrow
+Flask-Bcrypt
+Flask-CORS
 Flask-JWT-Extended
+marshmallow
+marshmallow-arrow
+marshmallow-enum
+webargs
+
+docker
+redis
